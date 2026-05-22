@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Friends</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="left-sidebar">
+        <button class="nav-icon-IS" onclick="window.location.href='/feed.html'"></button>
+        <button class="nav-icon-DF" onclick="window.location.href='/feed_digital_frontier.html'"></button>
+        <button class="nav-icon-LP" onclick="window.location.href='/feed_launchpad.html'"></button>
+        <button class="nav-icon-PL" onclick="window.location.href='/feed_play_lab.html'"></button>
+        <button class="nav-icon-LS" onclick="window.location.href='/feed_life_science.html'"></button>
+        <button class="nav-icon-Tt" onclick="window.location.href='/feed_tangible_tech.html'"></button>
+        <button class="nav-icon-C" onclick="window.location.href='/feed_cultivate.html'"></button>
+        <button class="nav-icon-FL" onclick="window.location.href='/feed_fast_lane.html'"></button>
+        <button class="nav-icon-UC" onclick="window.location.href='/feed_urban_core.html'"></button>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="theme-logo">
+                <img src="/assets/IdeaStream.png" alt="Logo" class="theme-logo-img">
+            </div>
+            <input type="text" class="search-box" placeholder="Search...">
+            <button class="search-btn"></button>
+        </div>
+
+        <div class="top-right">
+            <span class="username" id="username" onclick="window.location.href='/profile.html'"></span>
+            <a href="/create_post.html"><button class="icon-btn-idea"></button></a>
+            <a href="/feed.html"><button class="icon-btn-friends"></button></a>
+            <button class="icon-btn-undo" onclick="undoAction()"></button>
+            <button class="icon-btn-logout" onclick="logout()"></button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="friends-container">
+            <h2>My Friends</h2>
+            
+            <div id="friendsList" class="friends-list">
+                <div class="loading">Loading friends...</div>
+            </div>
+        </div>
+
+        <!-- SEARCH AND ADD FRIENDS SECTION -->
+        <div class="add-friends-container">
+            <h2>Find Friends</h2>
+            
+            <div class="search-friends-section">
+                <input type="text" id="friendSearchBox" class="friend-search-input" placeholder="Search by name or username...">
+                <button class="friend-search-btn" onclick="searchFriends()">Search</button>
+            </div>
+
+            <div id="searchResults" class="search-results">
+                <div class="search-hint">Search for users to add as friends</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<style>
+    body {
+    margin: 0;
+    font-family: Arial;
+    background: #FFEAC5;
+    color: black;
+}
+
+/* LEFT SIDEBAR */
+.left-sidebar {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 80px;
+    height: 100vh;
+    background: #603F26;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-IS, .nav-icon-DF, .nav-icon-LP, .nav-icon-PL, .nav-icon-LS, 
+.nav-icon-Tt, .nav-icon-C, .nav-icon-FL, .nav-icon-UC {
+    width: 58px;
+    height: 58px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-IS { background-image: url('/assets/IS.png'); border-radius: 12px; }
+.nav-icon-DF { background-image: url('/assets/DF.png'); border-radius: 8px; margin-top: 8px; }
+.nav-icon-LP { background-image: url('/assets/LP.png'); border-radius: 10px; margin-top: 8px; }
+.nav-icon-PL { background-image: url('/assets/PL.png'); border-radius: 8px; margin-top: 8px; }
+.nav-icon-LS { background-image: url('/assets/LS.png'); border-radius: 8px; margin-top: 8px; }
+.nav-icon-Tt { background-image: url('/assets/Tt.png'); border-radius: 10px; margin-top: 8px; }
+.nav-icon-C { background-image: url('/assets/C.png'); border-radius: 10px; margin-top: 8px; }
+.nav-icon-FL { background-image: url('/assets/FL.png'); border-radius: 10px; margin-top: 8px; }
+.nav-icon-UC { background-image: url('/assets/UC.png'); border-radius: 10px; margin-top: 8px; }
+
+.nav-icon-IS:hover, .nav-icon-DF:hover, .nav-icon-LP:hover, .nav-icon-PL:hover, 
+.nav-icon-LS:hover, .nav-icon-Tt:hover, .nav-icon-C:hover, .nav-icon-FL:hover, .nav-icon-UC:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-IS:active, .nav-icon-DF:active, .nav-icon-LP:active, .nav-icon-PL:active,
+.nav-icon-LS:active, .nav-icon-Tt:active, .nav-icon-C:active, .nav-icon-FL:active, .nav-icon-UC:active {
+    transform: scale(0.95);
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 80px;
+    height: 50px;
+    width: calc(100% - 80px);
+    background: #914F1E;
+    border-bottom: 1px solid #603F26;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-logo {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+ 
+.theme-logo-img {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 5px;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
+.search-box {
+    width: 250px;
+    padding: 10px 12px;
+    border: 1px solid #603F26;
+    border-radius: 20px;
+    background-color: #FFEAC5;
+    font-family: 'Fredoka', sans-serif;
+    color: #603F26;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.4);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.search-box::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.search-box:hover {
+    box-shadow: 0 4px 12px rgba(96, 63, 38, 0.5);
+    transform: scaleX(1.05);
+}
+
+.search-box:focus {
+    box-shadow: 0 6px 16px rgba(96, 63, 38, 0.6);
+}
+
+.search-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/searchis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.search-btn:hover { transform: scale(1.1); }
+.search-btn:active { transform: scale(0.95); }
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 40%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.username {
+    font-family: 'Chewy', cursive;
+    color: #FFEAC5;
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, text-shadow 0.2s;
+}
+
+.username:hover {
+    transform: scale(1.05);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.username:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-friends, .icon-btn-idea, .icon-btn-logout {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-friends { background-image: url('/assets/friendsis.png'); }
+.icon-btn-idea { background-image: url('/assets/ideais.png'); }
+.icon-btn-logout { background-image: url('/assets/logoutis.png'); }
+
+.icon-btn-friends:hover, .icon-btn-idea:hover, .icon-btn-logout:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-friends:active, .icon-btn-idea:active, .icon-btn-logout:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-undo {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/undobtn.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-undo:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-undo:active {
+    transform: scale(0.95);
+}
+
+/* MAIN CONTENT */
+.main-content {
+    margin-left: 100px;
+    margin-top: 70px;
+    padding: 30px;
+    display: flex;
+    gap: 40px;
+}
+
+.friends-container {
+    flex: 1;
+    max-width: 800px;
+}
+
+.friends-container h2 {
+    font-family: 'Chewy', cursive;
+    color: #914F1E;
+    font-size: 40px;
+    margin-bottom: 30px;
+}
+
+.friends-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.friend-card {
+    background: #914F1E;
+    border: 1px solid #603F26;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.friend-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.friend-info {
+    flex: 1;
+}
+
+.friend-name {
+    font-family: 'Chewy', cursive;
+    color: #FFEAC5;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.friend-username {
+    font-family: 'Fredoka', sans-serif;
+    color: #FFEAC5;
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.remove-friend-btn {
+    background: #A0442C;
+    color: #FFEAC5;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.remove-friend-btn:hover {
+    background: #8B3620;
+    transform: scale(1.05);
+}
+
+.remove-friend-btn:active {
+    transform: scale(0.95);
+}
+
+/* ADD FRIENDS SECTION */
+.add-friends-container {
+    flex: 1;
+    max-width: 500px;
+}
+
+.add-friends-container h2 {
+    font-family: 'Chewy', cursive;
+    color: #914F1E;
+    font-size: 40px;
+    margin-bottom: 30px;
+}
+
+.search-friends-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.friend-search-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #603F26;
+    border-radius: 20px;
+    background-color: #FFEAC5;
+    font-family: 'Fredoka', sans-serif;
+    color: #603F26;
+    font-size: 16px;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.4);
+    transition: box-shadow 0.2s;
+}
+
+.friend-search-input::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.friend-search-input:focus {
+    box-shadow: 0 4px 12px rgba(96, 63, 38, 0.5);
+}
+
+.friend-search-btn {
+    padding: 12px 25px;
+    background: #914F1E;
+    color: #FFEAC5;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Chewy', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.friend-search-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.friend-search-btn:active {
+    transform: scale(0.95);
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.search-hint {
+    font-family: 'Fredoka', sans-serif;
+    color: #914F1E;
+    font-size: 16px;
+    text-align: center;
+    padding: 20px;
+    opacity: 0.7;
+}
+
+.search-result-card {
+    background: #914F1E;
+    border: 1px solid #603F26;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.search-result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+.search-result-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-result-name {
+    font-family: 'Chewy', cursive;
+    color: #FFEAC5;
+    font-size: 20px;
+    margin-bottom: 3px;
+}
+
+.search-result-username {
+    font-family: 'Fredoka', sans-serif;
+    color: #FFEAC5;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.add-friend-btn {
+    padding: 8px 20px;
+    background: #603F26;
+    color: #FFEAC5;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.add-friend-btn:hover {
+    transform: scale(1.05);
+    background: #4a2f1d;
+}
+
+.add-friend-btn:active {
+    transform: scale(0.95);
+}
+
+.add-friend-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.no-results {
+    font-family: 'Fredoka', sans-serif;
+    color: #914F1E;
+    font-size: 16px;
+    text-align: center;
+    padding: 20px;
+}
+
+.loading {
+    font-family: 'Fredoka', sans-serif;
+    color: #914F1E;
+    font-size: 18px;
+    text-align: center;
+    padding: 40px;
+}
+
+.no-friends {
+    background: #914F1E;
+    border: 1px solid #603F26;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    font-family: 'Fredoka', sans-serif;
+    color: #FFEAC5;
+    font-size: 18px;
+}
+
+</style>
+
+<script>
+// Check authentication
+async function checkAuth() {
+    try {
+        const res = await fetch('/api/user/current');
+        const data = await res.json();
+        if (data.username) {
+            document.getElementById('username').textContent = data.username;
+        } else {
+            window.location.href = '/login_new.html';
+        }
+    } catch (err) {
+        window.location.href = '/login_new.html';
+    }
+}
+
+// Load friends
+async function loadFriends() {
+    try {
+        const res = await fetch('/api/friends');
+        const friends = await res.json();
+        
+        const container = document.getElementById('friendsList');
+        
+        if (friends.length === 0) {
+            container.innerHTML = '<div class="no-friends">You haven\'t added any friends yet. Go to the feed to find people!</div>';
+            return;
+        }
+        
+        container.innerHTML = friends.map(friend => `
+            <div class="friend-card">
+                <div class="friend-info">
+                    <div class="friend-name">${friend.fullName || friend.username}</div>
+                    <div class="friend-username">@${friend.username}</div>
+                </div>
+                <button class="remove-friend-btn" onclick="removeFriend('${friend.username}')">Remove</button>
+            </div>
+        `).join('');
+    } catch (err) {
+        console.error('Error loading friends:', err);
+        document.getElementById('friendsList').innerHTML = '<div class="loading">Error loading friends</div>';
+    }
+}
+
+// Search for friends
+async function searchFriends() {
+    const searchBox = document.getElementById('friendSearchBox');
+    const query = searchBox.value.trim();
+    const resultsContainer = document.getElementById('searchResults');
+    
+    if (!query) {
+        resultsContainer.innerHTML = '<div class="search-hint">Enter a name or username to search</div>';
+        return;
+    }
+    
+    resultsContainer.innerHTML = '<div class="loading">Searching...</div>';
+    
+    try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        
+        // Filter users based on search query
+        const filteredUsers = users.filter(user => {
+            const fullName = (user.fullName || '').toLowerCase();
+            const username = user.username.toLowerCase();
+            const searchTerm = query.toLowerCase();
+            return fullName.includes(searchTerm) || username.includes(searchTerm);
+        });
+        
+        if (filteredUsers.length === 0) {
+            resultsContainer.innerHTML = '<div class="no-results">No users found matching your search</div>';
+            return;
+        }
+        
+        resultsContainer.innerHTML = filteredUsers.map(user => `
+            <div class="search-result-card">
+                <div class="search-result-info">
+                    <div class="search-result-name">${user.fullName || user.username}</div>
+                    <div class="search-result-username">@${user.username}</div>
+                </div>
+                <button class="add-friend-btn" onclick="addFriend('${user.username}')">Add Friend</button>
+            </div>
+        `).join('');
+    } catch (err) {
+        console.error('Error searching friends:', err);
+        resultsContainer.innerHTML = '<div class="no-results">Error searching users</div>';
+    }
+}
+
+// Add friend
+async function addFriend(username) {
+    try {
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        
+        const res = await fetch('/api/friend/add', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await res.json();
+        if (data.status === 'success') {
+            alert('Friend added successfully!');
+            loadFriends();
+            searchFriends(); // Refresh search results
+        } else {
+            alert(data.message || 'Failed to add friend');
+        }
+    } catch (err) {
+        console.error('Error adding friend:', err);
+        alert('Error adding friend');
+    }
+}
+
+// Remove friend
+async function removeFriend(username) {
+    if (!confirm(`Are you sure you want to remove ${username} from your friends?`)) {
+        return;
+    }
+    
+    try {
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        
+        const res = await fetch('/api/friend/remove', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await res.json();
+        if (data.status === 'success') {
+            alert('Friend removed successfully!');
+            loadFriends(); // Refresh friends list
+        } else {
+            alert(data.message || 'Failed to remove friend');
+        }
+    } catch (err) {
+        console.error('Error removing friend:', err);
+        alert('Error removing friend');
+    }
+}
+
+// Allow Enter key for search
+document.addEventListener('DOMContentLoaded', () => {
+    const searchBox = document.getElementById('friendSearchBox');
+    if (searchBox) {
+        searchBox.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchFriends();
+        });
+    }
+});
+
+// Undo action
+async function undoAction() {
+    try {
+        const res = await fetch('/api/undo', { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+            alert(data.message);
+            loadFriends();
+        } else {
+            alert(data.message || 'Nothing to undo');
+        }
+    } catch (err) {
+        console.error('Error undoing action:', err);
+        alert('Error undoing action');
+    }
+}
+
+// Logout
+async function logout() {
+    try {
+        await fetch('/api/logout');
+        window.location.href = '/login_new.html';
+    } catch (err) {
+        console.error('Error logging out:', err);
+    }
+}
+
+// Initialize
+checkAuth();
+loadFriends();
+</script>
+</html>

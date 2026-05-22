@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Idea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="left-sidebar">
+        <button class="nav-icon-IS" onclick="window.location.href='/feed.html'"></button>
+        <button class="nav-icon-DF" onclick="window.location.href='/feed_digital_frontier.html'"></button>
+        <button class="nav-icon-LP" onclick="window.location.href='/feed_launchpad.html'"></button>
+        <button class="nav-icon-PL" onclick="window.location.href='/feed_play_lab.html'"></button>
+        <button class="nav-icon-LS" onclick="window.location.href='/feed_life_science.html'"></button>
+        <button class="nav-icon-Tt" onclick="window.location.href='/feed_tangible_tech.html'"></button>
+        <button class="nav-icon-C" onclick="window.location.href='/feed_cultivate.html'"></button>
+        <button class="nav-icon-FL" onclick="window.location.href='/feed_fast_lane.html'"></button>
+        <button class="nav-icon-UC" onclick="window.location.href='/feed_urban_core.html'"></button>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="theme-logo">
+                <img src="/assets/IdeaStream.png" alt="Logo" class="theme-logo-img">
+            </div>
+            <input type="text" class="search-box" placeholder="Search...">
+            <button class="search-btn"></button>
+        </div>
+
+        <div class="top-right">
+            <span class="username" id="username" onclick="window.location.href='/profile.html'"></span>
+            <a href="/feed.html"><button class="icon-btn-idea"></button></a>
+            <a href="/friends.html"><button class="icon-btn-friends"></button></a>
+            <button class="icon-btn-undo" onclick="undoAction()"></button>
+            <button class="icon-btn-logout" onclick="logout()"></button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <form class="create-idea-container" id="createIdeaForm">
+            <h2>Create Your Idea</h2>
+
+            <input type="text" name="title" class="idea-title-input" placeholder="Enter idea title..." required>
+
+            <select name="themeTag" class="theme-tag-select" required>
+                <option value="">Select a Theme Tag</option>
+                <option value="Digital Frontier">Digital Frontier</option>
+                <option value="Launchpad">Launchpad</option>
+                <option value="Play Lab">Play Lab</option>
+                <option value="Life Science">Life Science</option>
+                <option value="Tangible Tech">Tangible Tech</option>
+                <option value="Cultivate">Cultivate</option>
+                <option value="Fast Lane">Fast Lane</option>
+                <option value="Urban Core">Urban Core</option>
+            </select>
+
+            <textarea name="description" class="idea-content-input" placeholder="Describe your idea..." required></textarea>
+
+            <button type="submit" class="post-btn">Post</button>
+        </form>
+    </div>
+
+</body>
+<style>
+    body {
+    margin: 0;
+    font-family: Arial;
+    background: #FFEAC5;
+    color: black;
+}
+
+/* LEFT SIDEBAR */
+.left-sidebar {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 80px;
+    height: 100vh;
+    background: #603F26;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-IS {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/IS.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    border: none;
+    border-radius:12px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-IS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-IS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-DF {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/DF.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-DF:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-DF:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LP {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/LP.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-LP:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LP:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-PL {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/PL.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:08px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-PL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-PL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LS {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/LS.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-LS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-Tt {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/Tt.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-Tt:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-Tt:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-C {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/C.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-C:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-C:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-FL {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/FL.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-FL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-FL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-UC {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/UC.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-UC:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-UC:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 80px;
+    height: 50px;
+    width: calc(100% - 80px);
+    background: #914F1E;
+    border-bottom: 2px solid black;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-logo {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+ 
+.theme-logo-img {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 5px;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
+.search-box {
+    width: 250px;
+    padding: 10px 12px;
+    border: 1px solid #603F26;
+    border-radius: 20px;
+    background-color: #FFEAC5;
+    font-family: 'Fredoka', sans-serif;
+    color: #603F26;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.4);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.search-box::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.search-box:hover {
+    box-shadow: 0 4px 12px rgba(96, 63, 38, 0.5);
+    transform: scaleX(1.05);
+}
+
+.search-box:focus {
+    box-shadow: 0 6px 16px rgba(96, 63, 38, 0.6);
+}
+
+.search-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/searchis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.search-btn:hover {
+    transform: scale(1.1);
+}
+
+.search-btn:active {
+    transform: scale(0.95);
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 40%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.username {
+    font-family: 'Chewy', cursive;
+    color: #FFEAC5;
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, text-shadow 0.2s;
+}
+
+.username:hover {
+    transform: scale(1.05);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.username:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-friends {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/friendsis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-friends:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-friends:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-idea {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/ideais.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-idea:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-idea:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-logout {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/logoutis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-logout:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-logout:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-undo {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/undobtn.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-undo:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-undo:active {
+    transform: scale(0.95);
+}
+
+/* MAIN CONTAINER */
+.main-container {
+    margin-left: 100px;
+    margin-top: 70px;
+    padding: 30px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-sizing: border-box;
+}
+
+.create-idea-container {
+    padding: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-sizing: border-box;
+}
+
+.create-idea-container h2 {
+    font-family: 'Chewy', cursive;
+    color: #914F1E;
+    margin-bottom: 20px;
+    font-size: 50px;
+}
+
+/* Title Input */
+.idea-title-input {
+    padding: 12px 15px;
+    border: 1px solid #603F26;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.3);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.idea-title-input::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.idea-title-input:hover {
+    box-shadow: 0 4px 10px rgba(96, 63, 38, 0.4);
+}
+
+.idea-title-input:focus {
+    box-shadow: 0 6px 12px rgba(96, 63, 38, 0.5);
+}
+
+/* Theme Tag Select */
+.theme-tag-select {
+    padding: 12px 15px;
+    border: 1px solid #603F26;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.3);
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+    color: #603F26;
+    background-color: #FFEAC5;
+}
+
+.theme-tag-select:hover {
+    box-shadow: 0 4px 10px rgba(96, 63, 38, 0.4);
+}
+
+.theme-tag-select:focus {
+    box-shadow: 0 6px 12px rgba(96, 63, 38, 0.5);
+}
+
+/* Content Input */
+.idea-content-input {
+    padding: 12px 15px;
+    border: 1px solid #603F26;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    height: 200px;
+    resize: vertical;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.3);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.idea-content-input::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.idea-content-input:hover {
+    box-shadow: 0 4px 10px rgba(96, 63, 38, 0.4);
+}
+
+.idea-content-input:focus {
+    box-shadow: 0 6px 12px rgba(96, 63, 38, 0.5);
+}
+
+/* Post Button */
+.post-btn {
+    width: 120px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 12px;
+    background-color: #914F1E;
+    color: #FFEAC5;
+    font-family: 'Chewy', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.post-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.post-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+</style>
+
+<script>
+// Check authentication
+async function checkAuth() {
+    try {
+        const res = await fetch('/api/user/current');
+        const data = await res.json();
+        if (data.username) {
+            document.getElementById('username').textContent = data.username;
+        } else {
+            window.location.href = '/login_new.html';
+        }
+    } catch (err) {
+        window.location.href = '/login_new.html';
+    }
+}
+
+// Handle form submission
+document.getElementById('createIdeaForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const form = e.target;
+    const data = new URLSearchParams(new FormData(form));
+
+    try {
+        const res = await fetch('/api/post/create', {
+            method: 'POST',
+            body: data
+        });
+
+        const result = await res.json();
+        if (result.status === 'success') {
+            alert('Idea posted successfully!');
+            window.location.href = '/feed.html';
+        } else {
+            alert(result.message || 'Failed to post idea');
+        }
+    } catch (err) {
+        console.error('Error posting idea:', err);
+        alert('Error posting idea. Please try again.');
+    }
+});
+
+// Undo action
+async function undoAction() {
+    try {
+        const res = await fetch('/api/undo', { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+            alert(data.message);
+        } else {
+            alert(data.message || 'Nothing to undo');
+        }
+    } catch (err) {
+        console.error('Error undoing action:', err);
+        alert('Error undoing action');
+    }
+}
+
+// Logout
+async function logout() {
+    try {
+        await fetch('/api/logout');
+        window.location.href = '/login_new.html';
+    } catch (err) {
+        console.error('Error logging out:', err);
+    }
+}
+
+// Initialize
+checkAuth();
+</script>
+</html>

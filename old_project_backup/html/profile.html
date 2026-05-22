@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="left-sidebar">
+        <button class="nav-icon-IS" onclick="window.location.href='/feed.html'"></button>
+        <button class="nav-icon-DF" onclick="window.location.href='/feed_digital_frontier.html'"></button>
+        <button class="nav-icon-LP" onclick="window.location.href='/feed_launchpad.html'"></button>
+        <button class="nav-icon-PL" onclick="window.location.href='/feed_play_lab.html'"></button>
+        <button class="nav-icon-LS" onclick="window.location.href='/feed_life_science.html'"></button>
+        <button class="nav-icon-Tt" onclick="window.location.href='/feed_tangible_tech.html'"></button>
+        <button class="nav-icon-C" onclick="window.location.href='/feed_cultivate.html'"></button>
+        <button class="nav-icon-FL" onclick="window.location.href='/feed_fast_lane.html'"></button>
+        <button class="nav-icon-UC" onclick="window.location.href='/feed_urban_core.html'"></button>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="theme-logo">
+                <img src="/assets/IdeaStream.png" alt="Logo" class="theme-logo-img">
+            </div>
+            <input type="text" class="search-box" placeholder="Search..." disabled>
+            <button class="search-btn" disabled></button>
+        </div>
+
+        <div class="top-right">
+            <span class="username" id="username"></span>
+            <a href="/create_post.html"><button class="icon-btn-idea"></button></a>
+            <a href="/friends.html"><button class="icon-btn-friends"></button></a>
+            <button class="icon-btn-undo" onclick="undoAction()"></button>
+            <button class="icon-btn-logout" onclick="logout()"></button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <form class="profile-form-container" id="profileForm">
+            <h2>Update Profile</h2>
+
+            <div class="profile-info">
+                <label>Username</label>
+                <input type="text" id="displayUsername" class="profile-input" disabled>
+            </div>
+
+            <div class="profile-info">
+                <label>Full Name</label>
+                <input type="text" name="fullName" id="fullNameInput" class="profile-input" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="profile-info">
+                <label>New Password (leave blank to keep current)</label>
+                <input type="password" name="password" id="passwordInput" class="profile-input" placeholder="Enter new password (optional)">
+            </div>
+
+            <div class="profile-info">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirmPasswordInput" class="profile-input" placeholder="Confirm new password">
+            </div>
+
+            <button type="submit" class="update-btn">Update Profile</button>
+            <button type="button" class="cancel-btn" onclick="window.location.href='/feed.html'">Cancel</button>
+        </form>
+    </div>
+
+</body>
+<style>
+    body {
+    margin: 0;
+    font-family: Arial;
+    background: #FFEAC5;
+    color: black;
+}
+
+/* LEFT SIDEBAR */
+.left-sidebar {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 80px;
+    height: 100vh;
+    background: #603F26;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-IS {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/IS.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    border: none;
+    border-radius:12px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-IS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-IS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-DF {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/DF.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-DF:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-DF:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LP {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/LP.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-LP:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LP:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-PL {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/PL.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:08px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-PL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-PL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LS {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/LS.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-LS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-Tt {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/Tt.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-Tt:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-Tt:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-C {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/C.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-C:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-C:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-FL {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/FL.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-FL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-FL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-UC {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/UC.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-UC:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-UC:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 80px;
+    height: 50px;
+    width: calc(100% - 80px);
+    background: #914F1E;
+    border-bottom: 1px solid #603F26;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-logo {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+ 
+.theme-logo-img {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 5px;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
+.search-box {
+    width: 250px;
+    padding: 10px 12px;
+    border: 1px solid #603F26;
+    border-radius: 20px;
+    background-color: #FFEAC5;
+    font-family: 'Fredoka', sans-serif;
+    color: #603F26;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.4);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.search-box::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.search-box:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.search-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/searchis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.search-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 40%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.username {
+    font-family: 'Chewy', cursive;
+    color: #FFEAC5;
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, text-shadow 0.2s;
+}
+
+.username:hover {
+    transform: scale(1.05);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.username:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-friends {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/friendsis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-friends:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-friends:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-idea {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/ideais.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-idea:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-idea:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-logout {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/logoutis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-logout:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-logout:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-undo {
+    width: 40px;
+    height: 40px;
+    background-color: #914F1E;
+    background-image: url('/assets/undobtn.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-undo:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-undo:active {
+    transform: scale(0.95);
+}
+
+/* MAIN CONTAINER */
+.main-container {
+    margin-left: 100px;
+    margin-top: 70px;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 100px);
+}
+
+.profile-form-container {
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    box-sizing: border-box;
+    background: #914F1E;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.profile-form-container h2 {
+    font-family: 'Chewy', cursive;
+    color: #FFEAC5;
+    margin-bottom: 20px;
+    font-size: 50px;
+    text-align: center;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-info label {
+    font-family: 'Fredoka', sans-serif;
+    color: #FFEAC5;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.profile-input {
+    padding: 12px 15px;
+    border: 1px solid #603F26;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.3);
+    transition: box-shadow 0.2s, transform 0.2s;
+    background-color: #FFEAC5;
+    color: #603F26;
+}
+
+.profile-input::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.profile-input:hover:not(:disabled) {
+    box-shadow: 0 4px 10px rgba(96, 63, 38, 0.4);
+}
+
+.profile-input:focus {
+    box-shadow: 0 6px 12px rgba(96, 63, 38, 0.5);
+}
+
+.profile-input:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background-color: #e0d5b8;
+}
+
+/* Buttons */
+.update-btn, .cancel-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Chewy', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.update-btn {
+    background-color: #603F26;
+    color: #FFEAC5;
+}
+
+.update-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.update-btn:active {
+    transform: scale(0.98);
+}
+
+.cancel-btn {
+    background-color: #8B5A3C;
+    color: #FFEAC5;
+}
+
+.cancel-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.cancel-btn:active {
+    transform: scale(0.98);
+}
+
+</style>
+
+<script>
+// Check authentication and load user data
+async function checkAuth() {
+    try {
+        const res = await fetch('/api/user/current');
+        const data = await res.json();
+        if (data.username) {
+            document.getElementById('username').textContent = data.username;
+            document.getElementById('displayUsername').value = data.username;
+            document.getElementById('fullNameInput').value = data.fullName || '';
+        } else {
+            window.location.href = '/login_new.html';
+        }
+    } catch (err) {
+        window.location.href = '/login_new.html';
+    }
+}
+
+// Handle form submission
+document.getElementById('profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const fullName = document.getElementById('fullNameInput').value.trim();
+    const password = document.getElementById('passwordInput').value;
+    const confirmPassword = document.getElementById('confirmPasswordInput').value;
+
+    // Validate passwords match if user is trying to change password
+    if (password && password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+    }
+
+    try {
+        const formData = new URLSearchParams();
+        formData.append('fullName', fullName || '.');
+        formData.append('password', password || '.');
+
+        const res = await fetch('/api/user/profile', {
+            method: 'PUT',
+            body: formData
+        });
+
+        const result = await res.json();
+        if (result.status === 'success') {
+            alert('Profile updated successfully!');
+            window.location.href = '/feed.html';
+        } else {
+            alert(result.message || 'Failed to update profile');
+        }
+    } catch (err) {
+        console.error('Error updating profile:', err);
+        alert('Error updating profile. Please try again.');
+    }
+});
+
+// Undo action
+async function undoAction() {
+    try {
+        const res = await fetch('/api/undo', { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+            alert(data.message);
+        } else {
+            alert(data.message || 'Nothing to undo');
+        }
+    } catch (err) {
+        console.error('Error undoing action:', err);
+        alert('Error undoing action');
+    }
+}
+
+// Logout
+async function logout() {
+    try {
+        await fetch('/api/logout');
+        window.location.href = '/login_new.html';
+    } catch (err) {
+        console.error('Error logging out:', err);
+    }
+}
+
+// Initialize
+checkAuth();
+</script>
+</html>

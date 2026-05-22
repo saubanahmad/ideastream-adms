@@ -1,0 +1,9 @@
+6|sauban|1
+7|hassan|1
+7|sauban|1
+8|hassan|1
+8|khizar|1
+9|sauban|1
+10|hassan|1
+10|khizar|1
+14|sultan|1

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - SocialConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: #FFEAC5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .left-section {
+            flex: 2;
+            background: linear-gradient(135deg, #603f26 0%, #603f26 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .left-image {
+            width: 80%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+
+        .left-caption {
+            font-family: 'Chewy', cursive;
+            font-size: 2rem;
+            color: #FFEAC5;
+            text-align: center;
+        }
+
+        .right-section {
+            flex: 1;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .right-image-container {
+            margin-bottom: 30px;
+        }
+
+        .right-image {
+            width: 110px;
+            height: auto;
+        }
+
+        .signup-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .login-input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Fredoka', sans-serif;
+            transition: border 0.3s;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: #8B5A3C;
+        }
+
+        .login-btn {
+            padding: 12px;
+            background: #8B5A3C;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-family: 'Fredoka', sans-serif;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        .login-btn:hover {
+            background: #6B4226;
+        }
+
+        .or-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .or-container hr {
+            flex: 1;
+            border: none;
+            border-top: 2px solid #ddd;
+        }
+
+        .or-container span {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .signup-link {
+            color: #8B5A3C;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .signup-link:hover {
+            color: #6B4226;
+            text-decoration: underline;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .message.error {
+            color: #d32f2f;
+            background: #ffebee;
+        }
+
+        .message.success {
+            color: #2e7d32;
+            background: #e8f5e9;
+        }
+
+        .message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- Left Section -->
+        <div class="left-section">
+            <img src="/assets/logolight.png" alt="SocialConnect Logo" class="left-image">
+            <p class="left-caption">Dream. Share. Vote. Build.</p>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="right-image-container">
+                <img src="/assets/ISlogo.png" alt="Logo" class="right-image">
+            </div>
+
+            <div class="message" id="message"></div>
+
+            <form class="signup-form" id="signupForm">
+                <input type="text" name="name" placeholder="Full Name" class="login-input" required>
+                <input type="text" name="username" placeholder="Username" class="login-input" required>
+                <input type="password" name="password" placeholder="Password" class="login-input" required>
+                <button type="submit" class="login-btn">Sign Up</button>
+            </form>
+
+            <div class="or-container">
+                <hr>
+                <span>OR</span>
+                <hr>
+            </div>
+
+            <a href="/login_new.html" class="signup-link">Login</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const data = new URLSearchParams(new FormData(form));
+            const message = document.getElementById('message');
+
+            try {
+                const res = await fetch('/api/signup', {
+                    method: 'POST',
+                    body: data
+                });
+
+                const result = await res.json();
+                
+                if (result.status === 'success') {
+                    message.textContent = result.message + ' Redirecting to login...';
+                    message.classList.remove('error');
+                    message.classList.add('success', 'show');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/login_new.html';
+                    }, 2000);
+                } else {
+                    message.textContent = result.message || 'Registration failed';
+                    message.classList.remove('success');
+                    message.classList.add('error', 'show');
+                }
+            } catch (error) {
+                message.textContent = 'Network error. Please try again.';
+                message.classList.remove('success');
+                message.classList.add('error', 'show');
+            }
+        });
+    </script>
+
+</body>
+</html>

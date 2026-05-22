@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SocialConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: #FFEAC5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .left-section {
+            flex: 2;
+            background: linear-gradient(135deg, #603f26 0%, #603f26 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        .left-image {
+            width: 80%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+
+        .left-caption {
+            font-family: 'Chewy', cursive;
+            font-size: 2rem;
+            color: #FFEAC5;
+            text-align: center;
+        }
+
+        .right-section {
+            flex: 1;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .right-image-container {
+            margin-bottom: 40px;
+        }
+
+        .right-image {
+            width: 110px;
+            height: auto;
+        }
+
+        .login-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .login-input {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Fredoka', sans-serif;
+            transition: border 0.3s;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: #8B5A3C;
+        }
+
+        .login-btn {
+            padding: 15px;
+            background: #8B5A3C;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-family: 'Fredoka', sans-serif;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .login-btn:hover {
+            background: #6B4226;
+        }
+
+        .or-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .or-container hr {
+            flex: 1;
+            border: none;
+            border-top: 2px solid #ddd;
+        }
+
+        .or-container span {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .signup-link {
+            color: #8B5A3C;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .signup-link:hover {
+            color: #6B4226;
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 5px;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- Left Section -->
+        <div class="left-section">
+            <img src="/assets/logolight.png" alt="SocialConnect Logo" class="left-image">
+            <p class="left-caption">Dream. Share. Vote. Build.</p>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="right-image-container">
+                <img src="/assets/ISlogo.png" alt="Logo" class="right-image">
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form class="login-form" id="loginForm">
+                <input type="text" name="username" placeholder="Username" class="login-input" required>
+                <input type="password" name="password" placeholder="Password" class="login-input" required>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+
+            <div class="or-container">
+                <hr>
+                <span>OR</span>
+                <hr>
+            </div>
+
+            <a href="/signup_new.html" class="signup-link">Sign Up</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const data = new URLSearchParams(new FormData(form));
+            const errorMsg = document.getElementById('errorMessage');
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    body: data,
+                    credentials: 'include'
+                });
+
+                const result = await res.json();
+                
+                if (result.status === 'success') {
+                    window.location.href = '/feed.html';
+                } else {
+                    errorMsg.textContent = result.message || 'Login failed';
+                    errorMsg.classList.add('show');
+                }
+            } catch (error) {
+                errorMsg.textContent = 'Network error. Please try again.';
+                errorMsg.classList.add('show');
+            }
+        });
+    </script>
+
+</body>
+</html>

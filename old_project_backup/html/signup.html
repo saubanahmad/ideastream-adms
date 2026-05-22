@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+
+        <!-- Left Section (2/3 width) -->
+        <div class="left-section">
+            <img src="/assets/logo.png" alt="Left Image" class="left-image">
+            <p class="left-caption">Dream. Share. Vote. Build.</p>
+        </div>
+
+        <!-- Right Section (1/3 width) -->
+        <div class="right-section">
+
+            <!-- Image in the middle -->
+            <div class="right-image-container">
+                <img src="/assets/ISlogo.png" alt="Logo" class="right-image">
+            </div>
+
+            <form action="/signup" method="post" class="signup-form">
+                <input type="text" name= "name" placeholder="Name" class="login-input">
+                <input type="text" name="username" placeholder="Username" class="login-input" required>
+                <input type="email" name="email" placeholder="Email" class="login-input" required>
+                <input type="password" name="password" placeholder="Password" class="login-input" required>
+                <button type="submit" class="login-btn">Sign Up</button>
+            </form>
+
+            <!-- OR Line -->
+            <div class="or-container">
+                <hr>
+                <span>OR</span>
+                <hr>
+            </div>
+
+            <!-- Login Link -->
+            <a href="/login" class="signup-link">Login</a>
+
+        </div>
+
+        <!-- Bottom Undo Button -->
+        <div class="bottom-buttons">
+            <button class="round-btn" id="undo-btn"></button>
+        </div>
+
+    </div>
+    <script>
+    document.querySelector('.signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const data = {};
+        formData.forEach((value, key) => data[key] = value);
+
+        const res = await fetch('/signup', {
+            method: 'POST',
+            body: new URLSearchParams(data)
+        });
+
+        const result = await res.json();
+
+        if (result.status === 'success') {
+            // Redirect to login page
+            window.location.href = result.redirect;
+        } else {
+            alert(result.message);
+        }
+    });
+</script>
+</body>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #FFEAC5;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Main Structure */
+    .main-container {
+        display: flex;
+        box-sizing: border-box;
+        height: 100vh;
+    }
+
+    /* Left Section */
+    .left-section {
+        width: 60%;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .left-image {
+        max-height: 80%;
+        max-width: 80%;
+        object-fit: contain;
+    }
+
+    .left-caption {
+        margin-top: 0px;
+        color: #914F1E;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    /* Right Section */
+    .right-section {
+        width: 40%;
+        background-color: #914F1E;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .right-image {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 0px;
+    }
+    .signup-form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;   /* centers input fields horizontally */
+        justify-content: center;
+    }
+
+    .login-input {
+        width: 70%;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border: 1px solid #FFEAC5;
+        border-radius: 8px;
+        background-color: #914F1E;
+        color: #FFEAC5;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 16px;
+        opacity: 1;
+        outline: none;
+    }
+
+    .login-input::placeholder {
+        color: #FFEAC5;
+        opacity: 0.6;
+    }
+
+    /* Sign Up Button */
+    .login-btn {
+        width: 77%;
+        padding: 8px;
+        margin: 20px 0;
+        border-radius: 12px;
+        border: none;
+        background-color: #FFEAC5;
+        color: #914F1E;
+        font-family: 'Chewy', cursive;
+        font-size: 22px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .login-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .login-btn:active {
+        transform: scale(1);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* OR Divider */
+    .or-container {
+        display: flex;
+        align-items: center;
+        width: 80%;
+        margin: 20px 0;
+        color: #FFEAC5;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 500;
+    }
+
+    .or-container hr {
+        flex: 1;
+        border: none;
+        border-top: 1px solid #FFEAC5;
+    }
+
+    .or-container span {
+        margin: 0 10px;
+    }
+
+    /* Login Link */
+    .signup-link {
+        color: #FFEAC5;
+        font-family: 'Fredoka', sans-serif;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+
+    .signup-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Bottom Buttons */
+    .bottom-buttons {
+        position: fixed;
+        bottom: 20px;
+        left: 96%;
+        transform: translateX(-50%);
+        display: flex;
+        z-index: 100;
+    }
+
+    .round-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: none;
+        background-color: #FFEAC5;
+        background-image: url('/assets/undobtn.png');
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(145, 79, 30, 0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .round-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .round-btn:active {
+        transform: scale(0.95);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+</style>
+</html>

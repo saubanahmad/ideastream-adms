@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="left-sidebar">
+        <div class="nav-icon">A</div>
+        <div class="nav-icon">B</div>
+        <div class="nav-icon">C</div>
+        <div class="nav-icon">D</div>
+        <div class="nav-icon">E</div>
+        <div class="nav-icon">F</div>
+        <div class="nav-icon">G</div>
+        <div class="nav-icon">H</div>
+        <div class="nav-icon">I</div>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="theme-logo">LOGO</div>
+            <input type="text" class="search-box" placeholder="Search...">
+            <button class="search-btn">Search</button>
+        </div>
+
+        <div class="top-right">
+            <span class="username">Sauban</span>
+            <button class="icon-btn">...</button>
+            <button class="icon-btn">...</button>
+            <button class="icon-btn">...</button>
+        </div>
+    </div>
+
+    <!-- MAIN & RIGHT SIDEBAR WRAPPER -->
+    <div class="content-wrapper">
+
+        <!-- MAIN FEED -->
+        <div class="main-feed">
+
+            <button class="create-idea-btn">Create Idea</button>
+
+            <div class="feed-item">
+                <div class="feed-header">Username</div>
+
+                <div class="feed-body">
+                    <h3 class="idea-title">Idea Title</h3>
+                    <p class="idea-desc">This is the idea content area...</p>
+                </div>
+
+                <div class="feed-actions">
+                    <button class="vote-btn">↑</button>
+                    <button class="vote-btn">↓</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="right-sidebar">
+            <div class="suggestions-title">People You May Know</div>
+
+            <div class="suggestions-list">
+                <div class="person-box">Person 1</div>
+                <div class="person-box">Person 2</div>
+                <div class="person-box">Person 3</div>
+                <div class="person-box">Person 4</div>
+                <div class="person-box">Person 5</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+<style>
+/* RESET */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* LEFT SIDEBAR */
+.left-sidebar {
+    position: fixed;
+    top: 70px;                 /* Avoids covering the top bar */
+    left: 0;
+    width: 100px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    border-right: 2px solid black;
+    background: white;
+    z-index: 5;
+}
+.nav-icon {
+    width: 80px;
+    height: 80px;
+    margin: 10px auto;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* TOP BAR */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 20px;
+    background: white;
+    border-bottom: 2px solid black;
+    z-index: 20;
+    box-sizing: border-box;
+}
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.theme-logo {
+    border: 2px solid black;
+    padding: 10px;
+}
+.search-box {
+    padding: 8px;
+    border: 2px solid black;
+}
+.search-btn,
+.icon-btn {
+    padding: 8px 12px;
+    border: 2px solid black;
+    background: white;
+    cursor: pointer;
+}
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap;
+}
+
+/* CONTENT WRAPPER */
+.content-wrapper {
+    margin-top: 70px;
+    margin-left: 100px;
+    width: calc(100% - 100px);
+    height: calc(100vh - 70px);
+    position: relative;
+}
+
+/* MAIN FEED */
+.main-feed {
+    position: relative;
+    width: 68%;                     /* stays 60% */
+    height: 100%;
+    margin-right: 40%;
+    padding: 20px;
+    overflow-y: auto;
+
+    /* THE REAL FIX */
+    box-sizing: border-box;
+
+    border-right: 2px solid black;
+}
+.create-idea-btn {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid black;
+    background: white;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+/* FEED ITEM */
+.feed-item {
+    border: 2px solid black;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* RIGHT SIDEBAR */
+/* RIGHT SIDEBAR */
+.right-sidebar {
+    position: fixed;
+    top: 70px;
+    right: 0;
+    width: 30%;
+    height: calc(100vh - 70px);
+
+    border-left: 2px solid black;
+    padding: 20px;
+    background: white;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+}
+.suggestions-list {
+    margin-top: 15px;
+    overflow-y: auto;
+    height: 100%;
+    padding-right: 10px;
+}
+.person-box {
+    border: 2px solid black;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+</style>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <div class="create-idea-container">
+        <h2>Create Your Idea</h2>
+
+        <!-- Title -->
+        <input type="text" class="idea-title-input" placeholder="Title">
+
+        <!-- Content -->
+        <textarea class="idea-content-input" placeholder="Describe your idea..."></textarea>
+
+        <!-- Idea Tags Dropdown -->
+        <select class="idea-tags">
+            <option value="" disabled selected>Select a tag</option>
+            <option value="DigitalFrontier">DigitalFrontier</option>
+            <option value="Launchpad">Launchpad</option>
+            <option value="PlayLab">PlayLab</option>
+            <option value="LifeScience">LifeScience</option>
+            <option value="TangibleTech">TangibleTech</option>
+            <option value="Cultivate">Cultivate</option>
+            <option value="FastLane">FastLane</option>
+            <option value="UrbanCore">UrbanCore</option>
+        </select>
+
+        <!-- Post Button -->
+        <button class="post-btn">Post</button>
+    </div>

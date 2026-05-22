@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Idea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="left-sidebar">
+        <button class="nav-icon-IS"></button>
+        <button class="nav-icon-DF"></button>
+        <button class="nav-icon-LP"></button>
+        <button class="nav-icon-PL"></button>
+        <button class="nav-icon-LS"></button>
+        <button class="nav-icon-Tt"></button>
+        <button class="nav-icon-C"></button>
+        <button class="nav-icon-FL"></button>
+        <button class="nav-icon-UC"></button>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="theme-logo">
+                <img src="/assets/IdeaStream.png" alt="Logo" class="theme-logo-img">
+            </div>
+            <input type="text" class="search-box" placeholder="Search...">
+            <button class="search-btn"></button>
+        </div>
+
+        <div class="top-right">
+            <span class="username">{{username}}</span>
+            <button class="icon-btn-idea"></button>
+            <button class="icon-btn-friends"></button>
+            <button class="icon-btn-logout"></button>
+        </div>
+    </div>
+
+    <!-- MAIN & RIGHT WRAPPER -->
+    <div class="content-wrapper">
+
+        <!-- MAIN FEED -->
+        <!-- MAIN CONTAINER -->
+<div class="main-container">
+    <form class="create-idea-container" id="createIdeaForm">
+        <h2>Create Your Idea</h2>
+
+        <input type="text" name="title" class="idea-title-input" placeholder="Title" required>
+        <textarea name="description" class="idea-content-input" placeholder="Describe your idea..." required></textarea>
+        <select name="theme" class="idea-tags" required>
+            <option value="" disabled selected>Select a tag</option>
+            <option value="DigitalFrontier">DigitalFrontier</option>
+            <option value="Launchpad">Launchpad</option>
+            <option value="PlayLab">PlayLab</option>
+            <option value="LifeScience">LifeScience</option>
+            <option value="TangibleTech">TangibleTech</option>
+            <option value="Cultivate">Cultivate</option>
+            <option value="FastLane">FastLane</option>
+            <option value="UrbanCore">UrbanCore</option>
+        </select>
+
+
+        <button type="submit" class="post-btn">Post</button>
+        <script>
+            document.getElementById('createIdeaForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const form = e.target;
+                const data = new URLSearchParams(new FormData(form));
+
+                const res = await fetch('/postidea', {
+                    method: 'POST',
+                    body: data
+                });
+
+                const result = await res.json();
+                if (result.status === 'success') {
+                    alert(result.message);
+                    window.location.href = result.redirect;
+                } else {
+                    alert(result.message);
+                }
+            });
+            </script>
+    </form>
+   
+</div>
+
+        <!-- <div class="right-sidebar">
+            <h3 class="right-title">People you may know</h3>
+
+            <div class="right-list">
+                <div class="person-box">Person 1</div>
+                <div class="person-box">Person 2</div>
+                <div class="person-box">Person 3</div>
+                <div class="person-box">Person 4</div>
+                <div class="person-box">Person 5</div>
+            </div>
+        </div> -->
+
+    </div>
+
+</body>
+<style>
+    body {
+    margin: 0;
+    font-family: Arial;
+    background: #FFEAC5;
+    color: black;
+}
+
+/* LEFT SIDEBAR */
+.left-sidebar {
+    position: fixed;
+    top: 0px; /* below top bar */
+    left: 0;
+    width: 80px;
+    height: 100vh;
+    background: #603F26;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center buttons horizontally */
+    padding-top: 10px;   /* optional, space from top */
+     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-IS {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/IS.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+
+    border: none;
+    border-radius:12px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-IS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-IS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-DF {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/DF.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-DF:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-DF:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LP {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/LP.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-LP:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-LP:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-PL {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/PL.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:08px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-PL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-PL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-LS {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/LS.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-LS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-LS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-Tt {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/Tt.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-Tt:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-Tt:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-C {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/C.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-C:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-C:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-FL {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/FL.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-FL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-FL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-UC {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/UC.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-UC:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-UC:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+
+    position: fixed;
+    top: 0;
+    left: 80px;
+    height: 50px;
+    width: calc(100% - 80px);
+
+    background: #914F1E;
+    border-bottom: 2px solid black;
+    z-index: 10;
+    box-sizing: border-box;
+
+
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.theme-logo {
+    width: 120px;          /* adjust as needed */
+    height: 120px;         /* adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;      /* remove any previous background */
+    border-radius: 20px;   /* optional, slightly rounded corners */
+    cursor: pointer;       /* if clickable */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+/* .theme-logo {
+    border: 2px solid black;
+    padding: 10px;
+} */
+ 
+.theme-logo-img {
+    width: 100%;           /* make image fill parent div */
+    height: 100%;
+    margin-bottom: 5px;
+    object-fit: contain;    /* maintain aspect ratio */
+    border-radius: 20px;   /* same as parent, optional */
+}
+
+.search-box {
+    width: 250px;
+    padding: 10px 12px;         /* more padding for bigger box */
+    border: 1px solid #603F26;  /* border color and thickness */
+    border-radius: 20px;          /* optional slight rounding */
+    background-color: #FFEAC5;   /* background color */
+    font-family: 'Fredoka', sans-serif; /* font */
+    color: #603F26;              /* text color */
+    outline: none;               /* remove default outline */
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.4); /* subtle shadow */
+    transition: box-shadow 0.2s, transform 0.2s;
+    
+}
+.search-box::placeholder {
+    color: #603F26;
+    opacity: 0.6;                /* 60% opacity */
+}
+/* Hover effect: increase box shadow */
+.search-box:hover {
+    box-shadow: 0 4px 12px rgba(96, 63, 38, 0.5);
+    transform: scaleX(1.05);     /* slightly increase width visually */
+}
+.search-box:focus {
+    box-shadow: 0 6px 16px rgba(96, 63, 38, 0.6);
+}
+
+.search-btn {
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/searchis.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+/* Hover effect */
+.search-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.search-btn:active {
+    transform: scale(0.95);
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 40%;          /* <— prevents overflow */
+    overflow: hidden;        /* hides if too large */
+    white-space: nowrap;     /* keeps in one line */
+
+}
+/* .username {
+    max-width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+} */
+.username {
+    font-family: 'Chewy', cursive;  /* Chewy font */
+    color: #FFEAC5;                  /* text color */
+    font-size: 18px;                 /* adjust size as needed */
+    margin-right: 10px;              /* optional spacing from buttons */
+    cursor: pointer;
+    transition: transform 0.2s, text-shadow 0.2s;
+}
+.username:hover {
+    transform: scale(1.05);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.username:active {
+    transform: scale(0.95);
+}
+.icon-btn-friends {
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/friendsis.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+/* Hover effect */
+.icon-btn-friends:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.icon-btn-friends:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-idea {
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/ideais.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+/* Hover effect */
+.icon-btn-idea:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.icon-btn-idea:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-logout {
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/logoutis.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+/* Hover effect */
+.icon-btn-logout:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.icon-btn-logout:active {
+    transform: scale(0.95);
+}
+/* CONTENT WRAPPER */
+/* .content-wrapper {
+    margin-top: 70px;
+    margin-left: 100px;
+    display: flex;
+    height: calc(100vh - 70px);
+} */
+
+.create-idea-container {
+    margin-left: 100px;   /* to not overlap with left sidebar */
+    margin-top: 70px;     /* under top bar */
+    padding: 30px;
+    width: 60%;           /* adjust width as needed */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;            /* spacing between elements */
+    box-sizing: border-box;
+}
+
+.create-idea-container h2 {
+    font-family: 'Chewy', cursive;
+    color: #914F1E;
+    margin-bottom: 20px;
+    font-size:50px;
+}
+
+/* Title Input */
+.idea-title-input {
+    padding: 12px 15px;
+    border: 1px solid #603F26;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.3);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.idea-title-input::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.idea-title-input:hover {
+    box-shadow: 0 4px 10px rgba(96, 63, 38, 0.4);
+}
+
+.idea-title-input:focus {
+    box-shadow: 0 6px 12px rgba(96, 63, 38, 0.5);
+}
+
+/* Content Input */
+.idea-content-input {
+    padding: 12px 15px;
+    border: 1px solid #603F26;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    height: 120px;
+    resize: vertical; /* allow vertical resizing */
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.3);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.idea-content-input::placeholder {
+    color: #603F26;
+    opacity: 0.6;
+}
+
+.idea-content-input:hover {
+    box-shadow: 0 4px 10px rgba(96, 63, 38, 0.4);
+}
+
+.idea-content-input:focus {
+    box-shadow: 0 6px 12px rgba(96, 63, 38, 0.5);
+}
+
+/* Idea Tags Dropdown */
+.idea-tags {
+    width: 104.5%;
+    padding: 10px 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #603F26;
+    background-color: #FFEAC5;
+    color: #603F26;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.3);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.idea-tags:hover {
+    box-shadow: 0 4px 10px rgba(96, 63, 38, 0.4);
+}
+
+.idea-tags:focus {
+    box-shadow: 0 6px 12px rgba(96, 63, 38, 0.5);
+}
+
+/* Post Button */
+.post-btn {
+    width: 120px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 12px;
+    background-color: #914F1E;
+    color: #FFEAC5;
+    font-family: 'Chewy', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.post-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.post-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+</style>
+</html>

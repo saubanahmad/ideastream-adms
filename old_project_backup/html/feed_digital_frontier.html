@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Frontier Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="left-sidebar">
+        <button class="nav-icon-IS" onclick="window.location.href='/feed.html'"></button>
+        <button class="nav-icon-DF" onclick="window.location.href='/feed_digital_frontier.html'"></button>
+        <button class="nav-icon-LP" onclick="window.location.href='/feed_launchpad.html'"></button>
+        <button class="nav-icon-PL" onclick="window.location.href='/feed_play_lab.html'"></button>
+        <button class="nav-icon-LS" onclick="window.location.href='/feed_life_science.html'"></button>
+        <button class="nav-icon-Tt" onclick="window.location.href='/feed_tangible_tech.html'"></button>
+        <button class="nav-icon-C" onclick="window.location.href='/feed_cultivate.html'"></button>
+        <button class="nav-icon-FL" onclick="window.location.href='/feed_fast_lane.html'"></button>
+        <button class="nav-icon-UC" onclick="window.location.href='/feed_urban_core.html'"></button>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="theme-logo">
+                <img src="/assets/DigitalFrontier.png" alt="Logo" class="theme-logo-img">
+            </div>
+            <input type="text" class="search-box" placeholder="Search ideas..." id="searchBox">
+            <button class="search-btn" onclick="searchIdeas()"></button>
+        </div>
+
+        <div class="top-right">
+            <span class="username" id="username" onclick="window.location.href='/profile.html'"></span>
+            <a href="/create_post.html"><button class="icon-btn-idea"></button></a>
+            <a href="/friends.html"><button class="icon-btn-friends"></button></a>
+            <button class="icon-btn-undo" onclick="undoAction()"></button>
+            <button class="icon-btn-logout" onclick="logout()"></button>
+        </div>
+    </div>
+
+    <!-- MAIN & RIGHT WRAPPER -->
+    <div class="content-wrapper">
+
+        <!-- MAIN FEED -->
+        <div class="main-feed">
+            <a href="/create_post.html"><button class="create-idea-btn">Create Idea</button></a>
+
+            <!-- Feed Toggle Buttons -->
+            <div class="feed-toggle">
+                <button class="toggle-btn active" onclick="switchFeed('fifo')">Latest Ideas</button>
+                <button class="toggle-btn" onclick="switchFeed('trending')">Trending Ideas</button>
+            </div>
+
+            <!-- FEED ITEMS CONTAINER -->
+            <div id="feedContainer"></div>
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="right-bar">
+            <div class="suggestions-title">People You May Know</div>
+
+            <div class="suggestions-list" id="suggestionsList">
+                <div class="person-box">Loading...</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<style>
+    body {
+    margin: 0;
+    font-family: Arial;
+    background: #E9DFC3;
+    color: black;
+}
+
+/* LEFT SIDEBAR */
+.left-sidebar {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 80px;
+    height: 100vh;
+    background: #0118D8;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-IS {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/IS.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    border: none;
+    border-radius:12px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-IS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-IS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-DF {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/DF.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-DF:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-DF:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LP {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/LP.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-LP:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LP:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-PL {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/PL.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:08px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-PL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-PL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LS {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/LS.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-LS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-Tt {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/Tt.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-Tt:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-Tt:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-C {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/C.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-C:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-C:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-FL {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/FL.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-FL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-FL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-UC {
+    width: 58px;
+    height: 58px;
+    background-image: url('/assets/UC.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.nav-icon-UC:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-UC:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 80px;
+    height: 50px;
+    width: calc(100% - 80px);
+    background: #1B56FD;
+    border-bottom: 1px solid #0118D8;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-logo {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+ 
+.theme-logo-img {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 5px;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
+.search-box {
+    width: 250px;
+    padding: 10px 12px;
+    border: 1px solid #0118D8;
+    border-radius: 20px;
+    background-color: #E9DFC3;
+    font-family: 'Fredoka', sans-serif;
+    color: #0118D8;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.4);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.search-box::placeholder {
+    color: #0118D8;
+    opacity: 0.6;
+}
+
+.search-box:hover {
+    box-shadow: 0 4px 12px rgba(96, 63, 38, 0.5);
+    transform: scaleX(1.05);
+}
+
+.search-box:focus {
+    box-shadow: 0 6px 16px rgba(96, 63, 38, 0.6);
+}
+
+.search-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #1B56FD;
+    background-image: url('/assets/searchis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.search-btn:hover {
+    transform: scale(1.1);
+}
+
+.search-btn:active {
+    transform: scale(0.95);
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 40%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.username {
+    font-family: 'Chewy', cursive;
+    color: #E9DFC3;
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, text-shadow 0.2s;
+}
+
+.username:hover {
+    transform: scale(1.05);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.username:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-friends {
+    width: 40px;
+    height: 40px;
+    background-color: #1B56FD;
+    background-image: url('/assets/friendsis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-friends:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-friends:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-idea {
+    width: 40px;
+    height: 40px;
+    background-color: #1B56FD;
+    background-image: url('/assets/ideais.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-idea:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-idea:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-logout {
+    width: 40px;
+    height: 40px;
+    background-color: #1B56FD;
+    background-image: url('/assets/logoutis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-logout:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-logout:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-undo {
+    width: 40px;
+    height: 40px;
+    background-color: #1B56FD;
+    background-image: url('/assets/undobtn.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.icon-btn-undo:hover {
+    transform: scale(1.1);
+}
+
+.icon-btn-undo:active {
+    transform: scale(0.95);
+}
+
+/* CONTENT WRAPPER */
+.content-wrapper {
+    margin-top: 70px;
+    margin-left: 100px;
+    display: flex;
+    height: calc(100vh - 70px);
+}
+
+/* MAIN FEED (64%) */
+.main-feed {
+    width: 64%;
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 0px solid black;
+}
+
+.create-idea-btn {
+    width: 100%;
+    padding: 12px;
+    background: #1B56FD;
+    color: #E9DFC3;
+    font-size: 40px;
+    font-family: 'Chewy', cursive;
+    border: none;
+    margin-bottom: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50px;
+    box-shadow: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.create-idea-btn:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.create-idea-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Feed Toggle */
+.feed-toggle {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    padding: 10px 20px;
+    background: #0118D8;
+    color: #E9DFC3;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Fredoka', sans-serif;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.toggle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-btn.active {
+    background: #1B56FD;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* FEED ITEM (IDEA) */
+.feed-item {
+    border: 1px solid #0118D8;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    background-color: #1B56FD;
+}
+
+.idea-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.idea-author {
+    color: #E9DFC3;
+    font-size: 18px;
+    font-family: 'Chewy', cursive;
+    margin-left: 10px;
+}
+
+.idea-tag {
+    background: #0118D8;
+    color: #E9DFC3;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.idea-title {
+    margin-left: 10px;
+    margin-bottom: 8px;
+    color: #E9DFC3;
+    font-size: 20px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 500;
+}
+
+.idea-content {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    color: #E9DFC3;
+    font-size: 15px;
+    font-family: 'Fredoka', sans-serif;
+    line-height: 1.5;
+}
+
+.idea-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.vote-btn-up {
+    width: 40px;
+    height: 40px;
+    background-color: #1B56FD;
+    background-image: url('/assets/voteis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 15px;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.vote-btn-up:hover {
+    transform: scale(1.1);
+}
+
+.vote-btn-up:active {
+    transform: scale(0.95);
+}
+
+.vote-btn-up.voted {
+    filter: brightness(2);
+}
+
+.vote-btn-down {
+    width: 40px;
+    height: 40px;
+    background-color: #1B56FD;
+    background-image: url('/assets/voteis.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;
+    transition: transform 0.2s;
+    transform: rotate(180deg);
+}
+
+.vote-btn-down:hover {
+    transform: rotate(180deg) scale(1.1);
+}
+
+.vote-btn-down:active {
+    transform: rotate(180deg) scale(0.95);
+}
+
+.vote-btn-down.voted {
+    filter: brightness(1.3);
+}
+
+.vote-count {
+    color: #E9DFC3;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.comment-btn {
+    padding: 8px 15px;
+    background: #0118D8;
+    color: #E9DFC3;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Fredoka', sans-serif;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: transform 0.2s;
+}
+
+.comment-btn:hover {
+    transform: scale(1.05);
+}
+
+.edit-btn, .delete-btn {
+    padding: 8px 15px;
+    color: #E9DFC3;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Fredoka', sans-serif;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: transform 0.2s;
+    font-size: 14px;
+}
+
+.edit-btn {
+    background: #8B5A3C;
+}
+
+.delete-btn {
+    background: #A0442C;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Comment Section */
+.comments-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #0118D8;
+    display: none;
+}
+
+.comments-section.show {
+    display: block;
+}
+
+.comment-item {
+    background: rgba(96, 63, 38, 0.3);
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.comment-author {
+    color: #E9DFC3;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.comment-text {
+    color: #E9DFC3;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 13px;
+}
+
+.comment-input-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.comment-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #0118D8;
+    border-radius: 15px;
+    background-color: #E9DFC3;
+    font-family: 'Fredoka', sans-serif;
+    color: #0118D8;
+    outline: none;
+}
+
+.comment-submit-btn {
+    padding: 8px 15px;
+    background: #0118D8;
+    color: #E9DFC3;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Fredoka', sans-serif;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.comment-submit-btn:hover {
+    transform: scale(1.05);
+}
+
+/* RIGHT SIDEBAR */
+.right-bar {
+    position: fixed;
+    top: 50px;
+    right: 0;
+    width: 30%;
+    height: calc(100vh - 70px);
+    background: #E9DFC3;
+    border-left: 2px solid #0118D8;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.suggestions-title {
+    font-family: 'Chewy', cursive;
+    color: #1B56FD;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.suggestions-list {
+    margin-top: 15px;
+    overflow-y: auto;
+    height: 100%;
+    padding-right: 10px;
+}
+
+.person-box {
+    border: 2px solid #0118D8;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #1B56FD;
+    color: #E9DFC3;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.person-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.add-friend-btn {
+    padding: 6px 12px;
+    background: #1B56FD;
+    color: #E9DFC3;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.add-friend-btn:hover {
+    transform: scale(1.05);
+}
+
+</style>
+
+<script>
+let currentFeed = 'fifo';
+let allIdeas = [];
+
+// Check authentication
+async function checkAuth() {
+    try {
+        const res = await fetch('/api/user/current');
+        const data = await res.json();
+        if (data.username) {
+            document.getElementById('username').textContent = data.username;
+        } else {
+            window.location.href = '/login_new.html';
+        }
+    } catch (err) {
+        window.location.href = '/login_new.html';
+    }
+}
+
+// Load feed
+async function loadFeed(type = 'fifo') {
+    try {
+        const endpoint = `/api/feed/filtered?theme=Digital Frontier&type=${type}`;
+        const res = await fetch(endpoint);
+        allIdeas = await res.json();
+        displayIdeas(allIdeas);
+    } catch (err) {
+        console.error('Error loading feed:', err);
+        document.getElementById('feedContainer').innerHTML = '<p style="color: #1B56FD; font-family: Fredoka;">Error loading ideas</p>';
+    }
+}
+
+// Display ideas
+function displayIdeas(ideas) {
+    const container = document.getElementById('feedContainer');
+    
+    if (ideas.length === 0) {
+        container.innerHTML = '<p style="color: #1B56FD; font-family: Fredoka; margin-left: 10px;">No ideas yet. Be the first to share!</p>';
+        return;
+    }
+    
+    const currentUser = document.getElementById('username').textContent;
+    
+    container.innerHTML = ideas.map(idea => `
+        <div class="feed-item">
+            <div class="idea-header">
+                <span class="idea-author">${idea.author}</span>
+                <span class="idea-tag">${idea.themeTag || 'Idea Stream'}</span>
+            </div>
+            ${idea.title ? `<div class="idea-title">${idea.title}</div>` : ''}
+            <div class="idea-content" id="content-${idea.id}">${idea.content}</div>
+            <div class="idea-actions">
+                <button class="vote-btn-up ${idea.userVote === 1 ? 'voted' : ''}" onclick="vote(${idea.id}, 1)"></button>
+                <span class="vote-count">${idea.upvotes - idea.downvotes}</span>
+                <button class="vote-btn-down ${idea.userVote === -1 ? 'voted' : ''}" onclick="vote(${idea.id}, -1)"></button>
+                <button class="comment-btn" onclick="toggleComments(${idea.id})">💬 ${idea.comments.length}</button>
+                ${idea.author === currentUser ? `
+                    <button class="edit-btn" onclick="editIdea(${idea.id})">Edit</button>
+                    <button class="delete-btn" onclick="deleteIdea(${idea.id})">Delete</button>
+                ` : ''}
+            </div>
+            <div class="comments-section" id="comments-${idea.id}">
+                <div class="comments-list">
+                    ${idea.comments.map(c => `
+                        <div class="comment-item">
+                            <div class="comment-author">${c.author}</div>
+                            <div class="comment-text">${c.content}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="comment-input-container">
+                    <input type="text" class="comment-input" id="comment-input-${idea.id}" placeholder="Add a comment...">
+                    <button class="comment-submit-btn" onclick="addComment(${idea.id})">Post</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Switch feed
+function switchFeed(type) {
+    currentFeed = type;
+    document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    loadFeed(type);
+}
+
+// Vote on idea
+async function vote(ideaId, voteType) {
+    try {
+        const endpoint = voteType === 1 ? `/api/post/${ideaId}/upvote` : `/api/post/${ideaId}/downvote`;
+        const res = await fetch(endpoint, { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+            loadFeed(currentFeed);
+        }
+    } catch (err) {
+        console.error('Error voting:', err);
+    }
+}
+
+// Toggle comments
+function toggleComments(ideaId) {
+    const section = document.getElementById(`comments-${ideaId}`);
+    section.classList.toggle('show');
+}
+
+// Add comment
+async function addComment(ideaId) {
+    const input = document.getElementById(`comment-input-${ideaId}`);
+    const comment = input.value.trim();
+    
+    if (!comment) return;
+    
+    try {
+        const formData = new URLSearchParams();
+        formData.append('comment', comment);
+        
+        const res = await fetch(`/api/post/${ideaId}/comment`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await res.json();
+        if (data.status === 'success') {
+            input.value = '';
+            loadFeed(currentFeed);
+        }
+    } catch (err) {
+        console.error('Error adding comment:', err);
+    }
+}
+
+// Search ideas
+function searchIdeas() {
+    const query = document.getElementById('searchBox').value.trim();
+    
+    if (!query) {
+        loadFeed(currentFeed);
+        return;
+    }
+    
+    fetch(`/api/search?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(ideas => displayIdeas(ideas))
+        .catch(err => console.error('Error searching:', err));
+}
+
+// Allow Enter key for search
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('searchBox').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') searchIdeas();
+    });
+});
+
+// Load friend suggestions
+async function loadSuggestions() {
+    try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        
+        const container = document.getElementById('suggestionsList');
+        if (users.length === 0) {
+            container.innerHTML = '<div class="person-box">No suggestions</div>';
+            return;
+        }
+        
+        container.innerHTML = users.map(user => `
+            <div class="person-box">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>${user.fullName || user.username}</span>
+                    <button class="add-friend-btn" onclick="addFriend('${user.username}')">Add</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (err) {
+        console.error('Error loading suggestions:', err);
+    }
+}
+
+// Add friend
+async function addFriend(username) {
+    try {
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        
+        const res = await fetch('/api/friend/add', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await res.json();
+        if (data.status === 'success') {
+            alert('Friend added successfully!');
+            loadSuggestions();
+        } else {
+            alert(data.message || 'Failed to add friend');
+        }
+    } catch (err) {
+        console.error('Error adding friend:', err);
+    }
+}
+
+// Edit idea
+function editIdea(ideaId) {
+    const contentDiv = document.getElementById(`content-${ideaId}`);
+    const currentContent = contentDiv.textContent;
+    
+    const newContent = prompt('Edit your idea:', currentContent);
+    if (newContent && newContent.trim() && newContent !== currentContent) {
+        const formData = new URLSearchParams();
+        formData.append('content', newContent);
+        
+        fetch(`/api/post/${ideaId}`, {
+            method: 'PUT',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                loadFeed(currentFeed);
+            } else {
+                alert('Failed to edit idea');
+            }
+        })
+        .catch(err => console.error('Error editing idea:', err));
+    }
+}
+
+// Delete idea
+function deleteIdea(ideaId) {
+    if (confirm('Are you sure you want to delete this idea?')) {
+        fetch(`/api/post/${ideaId}`, {
+            method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                loadFeed(currentFeed);
+            } else {
+                alert('Failed to delete idea');
+            }
+        })
+        .catch(err => console.error('Error deleting idea:', err));
+    }
+}
+
+// Undo action
+async function undoAction() {
+    try {
+        const res = await fetch('/api/undo', { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+            alert(data.message);
+            loadFeed(currentFeed);
+        } else {
+            alert(data.message || 'Nothing to undo');
+        }
+    } catch (err) {
+        console.error('Error undoing action:', err);
+        alert('Error undoing action');
+    }
+}
+
+// Logout
+async function logout() {
+    try {
+        await fetch('/api/logout');
+        window.location.href = '/login_new.html';
+    } catch (err) {
+        console.error('Error logging out:', err);
+    }
+}
+
+// Initialize
+checkAuth();
+loadFeed();
+loadSuggestions();
+</script>
+</html>
+

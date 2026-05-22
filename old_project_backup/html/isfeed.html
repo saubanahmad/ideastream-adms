@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="left-sidebar">
+        <button class="nav-icon-IS"></button>
+        <button class="nav-icon-DF"></button>
+        <button class="nav-icon-LP"></button>
+        <button class="nav-icon-PL"></button>
+        <button class="nav-icon-LS"></button>
+        <button class="nav-icon-Tt"></button>
+        <button class="nav-icon-C"></button>
+        <button class="nav-icon-FL"></button>
+        <button class="nav-icon-UC"></button>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="theme-logo">
+                <img src="/assets/IdeaStream.png" alt="Logo" class="theme-logo-img">
+            </div>
+            <input type="text" class="search-box" placeholder="Search...">
+            <button class="search-btn"></button>
+        </div>
+
+        <div class="top-right">
+            <!-- <span class="username">Sauban</span> -->
+            <span class="username">{{username}}</span>
+            <a href="/createidea?user={{username}}"><button class="icon-btn-idea"></button></a>
+            <button class="icon-btn-friends"></button>
+            <a href="/logout"><button class="icon-btn-logout"></button></a>
+        </div>
+    </div>
+
+    <!-- MAIN & RIGHT WRAPPER -->
+    <div class="content-wrapper">
+
+        <!-- MAIN FEED -->
+        <div class="main-feed">
+            <a href="/createidea?user={{username}}"><button class="create-idea-btn">Create Idea</button></a>
+
+            <!-- FEED ITEM -->
+            
+            {{feed_content}}
+
+        <!-- RIGHT SIDEBAR -->
+
+        <div class="right-bar">
+            <div class="suggestions-title">People You May Know</div>
+
+            <div class="suggestions-list">
+                <div class="person-box">Person 1</div>
+                <div class="person-box">Person 2</div>
+                <div class="person-box">Person 3</div>
+                <div class="person-box">Person 4</div>
+                <div class="person-box">Person 5</div>
+            </div>
+        </div>
+        <!-- <div class="right-sidebar">
+            <h3 class="right-title">People you may know</h3>
+
+            <div class="right-list">
+                <div class="person-box">Person 1</div>
+                <div class="person-box">Person 2</div>
+                <div class="person-box">Person 3</div>
+                <div class="person-box">Person 4</div>
+                <div class="person-box">Person 5</div>
+            </div>
+        </div> -->
+
+    </div>
+
+</body>
+<style>
+    body {
+    margin: 0;
+    font-family: Arial;
+    background: #FFEAC5;
+    color: black;
+}
+
+/* LEFT SIDEBAR */
+.left-sidebar {
+    position: fixed;
+    top: 0px; /* below top bar */
+    left: 0;
+    width: 80px;
+    height: 100vh;
+    background: #603F26;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center buttons horizontally */
+    padding-top: 10px;   /* optional, space from top */
+     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+
+.nav-icon-IS {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/IS.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+
+    border: none;
+    border-radius:12px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-IS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-IS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-DF {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/DF.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-DF:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-DF:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.nav-icon-LP {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/LP.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-LP:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-LP:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-PL {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/PL.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:08px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-PL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-PL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-LS {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/LS.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:8px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-LS:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-LS:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-Tt {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/Tt.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-Tt:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-Tt:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-C {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/C.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-C:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-C:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-FL {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/FL.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-FL:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-FL:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.nav-icon-UC {
+    width: 58px;                /* set desired width */
+    height: 58px;               /* set desired height */
+    background-image: url('/assets/UC.png'); /* path to your image */
+    background-size: cover;     /* cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat;
+    cursor: pointer;    
+    margin-top: 8px;
+    border: none;
+    border-radius:10px;   
+
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+
+/* Hover effect */
+.nav-icon-UC:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.nav-icon-UC:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+
+    position: fixed;
+    top: 0;
+    left: 80px;
+    height: 50px;
+    width: calc(100% - 80px);
+
+    background: #914F1E;
+    border-bottom: 1px solid #603F26;
+    z-index: 10;
+    box-sizing: border-box;
+
+
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.theme-logo {
+    width: 120px;          /* adjust as needed */
+    height: 120px;         /* adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;      /* remove any previous background */
+    border-radius: 20px;   /* optional, slightly rounded corners */
+    cursor: pointer;       /* if clickable */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+/* .theme-logo {
+    border: 2px solid black;
+    padding: 10px;
+} */
+ 
+.theme-logo-img {
+    width: 100%;           /* make image fill parent div */
+    height: 100%;
+    margin-bottom: 5px;
+    object-fit: contain;    /* maintain aspect ratio */
+    border-radius: 20px;   /* same as parent, optional */
+}
+
+.search-box {
+    width: 250px;
+    padding: 10px 12px;         /* more padding for bigger box */
+    border: 1px solid #603F26;  /* border color and thickness */
+    border-radius: 20px;          /* optional slight rounding */
+    background-color: #FFEAC5;   /* background color */
+    font-family: 'Fredoka', sans-serif; /* font */
+    color: #603F26;              /* text color */
+    outline: none;               /* remove default outline */
+    box-shadow: 0 2px 6px rgba(96, 63, 38, 0.4); /* subtle shadow */
+    transition: box-shadow 0.2s, transform 0.2s;
+    
+}
+.search-box::placeholder {
+    color: #603F26;
+    opacity: 0.6;                /* 60% opacity */
+}
+/* Hover effect: increase box shadow */
+.search-box:hover {
+    box-shadow: 0 4px 12px rgba(96, 63, 38, 0.5);
+    transform: scaleX(1.05);     /* slightly increase width visually */
+}
+.search-box:focus {
+    box-shadow: 0 6px 16px rgba(96, 63, 38, 0.6);
+}
+
+.search-btn {
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/searchis.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+/* Hover effect */
+.search-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.search-btn:active {
+    transform: scale(0.95);
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 40%;          /* <— prevents overflow */
+    overflow: hidden;        /* hides if too large */
+    white-space: nowrap;     /* keeps in one line */
+
+}
+/* .username {
+    max-width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+} */
+.username {
+    font-family: 'Chewy', cursive;  /* Chewy font */
+    color: #FFEAC5;                  /* text color */
+    font-size: 18px;                 /* adjust size as needed */
+    margin-right: 10px;              /* optional spacing from buttons */
+    cursor: pointer;
+    transition: transform 0.2s, text-shadow 0.2s;
+}
+.username:hover {
+    transform: scale(1.05);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.username:active {
+    transform: scale(0.95);
+}
+.icon-btn-friends {
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/friendsis.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+/* Hover effect */
+.icon-btn-friends:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.icon-btn-friends:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-idea {
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/ideais.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+/* Hover effect */
+.icon-btn-idea:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.icon-btn-idea:active {
+    transform: scale(0.95);
+}
+
+.icon-btn-logout {
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/logoutis.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+/* Hover effect */
+.icon-btn-logout:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.icon-btn-logout:active {
+    transform: scale(0.95);
+}
+/* CONTENT WRAPPER */
+.content-wrapper {
+    margin-top: 70px;
+    margin-left: 100px;
+    display: flex;
+    height: calc(100vh - 70px);
+}
+
+/* MAIN FEED (60%) */
+.main-feed {
+    width: 64%;
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 0px solid black;
+}
+
+.create-idea-btn {
+    width: 100%;
+    padding: 12px;
+    background: #914F1E;
+    color: #FFEAC5;
+    font-size: 40px;
+    font-family: 'Chewy', cursive;
+    border: none;
+    margin-bottom: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50px;
+    box-shadow: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.create-idea-btn:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Click / Active effect */
+.create-idea-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+/* FEED ITEM */
+.feed-item {
+    border: 1px solid #603F26;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    background-color: #914F1E;
+    border-radius: 30px;
+
+}
+
+.feed-header {
+    /* font-weight: bold; */
+    color: #FFEAC5;
+    font-size: 20px;
+    font-family: 'Chewy', cursive;
+    margin-bottom: 10px;
+    margin-left: 10px;
+
+}
+
+.feed-body {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    color: #FFEAC5;
+    font-size: 15px;
+    font-family: 'Fredoka', sans-serif; /* font */
+
+}
+
+.feed-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.vote-btn-up {
+
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/voteis.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+    margin-left: 10px;
+    /* padding: 8px 12px; */
+    cursor: pointer;
+}
+.vote-btn-up:hover {
+    transform: scale(1.1);
+}
+
+/* Click / Active effect */
+.vote-btn-up:active {
+    transform: scale(0.95);
+}
+.vote-btn-down {
+
+    width: 40px;                  /* square shape */
+    height: 40px;                 /* same as width */
+    background-color: #914F1E;    /* match your theme */
+    background-image: url('/assets/voteis.png'); /* path to your icon */
+    background-size: 60%;          /* scale the icon inside button */
+    background-repeat: no-repeat;
+    background-position: center;   /* center the icon */
+    cursor: pointer;
+    border-radius: 0px;
+    border: none;            /* slightly rounded corners, optional */
+    transition: transform 0.2s;
+    /* padding: 8px 12px; */
+    cursor: pointer;
+    transform: rotate(180deg);
+}
+.vote-btn-down:hover {
+    transform: rotate(180deg) scale(1.1);
+}
+
+/* Click / Active effect */
+.vote-btn-down:active {
+    transform: rotate(180deg) scale(0.95);
+}
+/* RIGHT SIDEBAR (40%) */
+.right-bar {
+    /* width: 40%;
+    padding: 20px;
+    overflow-y: auto; */
+
+    position: fixed;
+    top: 50px;                       /* starts under the top bar */
+    right: 0;
+    width: 30%;                      /* your design */
+    height: calc(100vh - 70px);      /* full height minus top bar */
+    background: white;
+    border-left: 2px solid black;
+    box-sizing: border-box;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+.suggestions-list {
+    margin-top: 15px;
+    overflow-y: auto;           /* Scroll only inside this div */
+    height: 100%;               /* Fill remaining area */
+    padding-right: 10px;        /* scrollbar room */
+}
+.person-box {
+    border: 2px solid black;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+</style>
+</html>
