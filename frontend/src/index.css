@@ -1,0 +1,123 @@
+/*
+ * src/index.css — Global styles for IdeaStream
+ *
+ * This file:
+ *   1. Loads Tailwind's base/components/utilities layers
+ *   2. Defines custom CSS variables for the brand palette
+ *   3. Sets global defaults (scrollbar, body background)
+ *   4. Adds reusable custom utility classes
+ */
+
+/* ─────────────────────────────────────────────
+   Tailwind CSS directives
+   These three lines inject all of Tailwind's styles
+   ───────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   Base layer — global resets and defaults
+   ───────────────────────────────────────────── */
+@layer base {
+  :root {
+    --color-dark:    #3B1F0E;
+    --color-primary: #603F26;
+    --color-accent:  #914F1E;
+    --color-light:   #C97B3A;
+    --color-cream:   #FFEAC5;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-dark);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* Custom scrollbar — matches brand colors */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-cream);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Component layer — reusable component classes
+   ───────────────────────────────────────────── */
+@layer components {
+  /* Primary button — used for main actions */
+  .btn-primary {
+    @apply bg-brand-accent text-brand-cream font-display font-medium
+           px-5 py-2 rounded-full transition-all duration-200
+           hover:bg-brand-light hover:scale-105 active:scale-95
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Secondary button — used for less prominent actions */
+  .btn-secondary {
+    @apply bg-brand-primary text-brand-cream font-display font-medium
+           px-5 py-2 rounded-full transition-all duration-200
+           hover:bg-brand-accent hover:scale-105 active:scale-95;
+  }
+
+  /* Ghost button — transparent with border */
+  .btn-ghost {
+    @apply border border-brand-primary text-brand-primary font-display
+           px-5 py-2 rounded-full transition-all duration-200
+           hover:bg-brand-primary hover:text-brand-cream hover:scale-105;
+  }
+
+  /* Card — used for posts, user cards, etc. */
+  .card {
+    @apply bg-brand-accent text-brand-cream rounded-3xl p-5
+           shadow-lg transition-transform duration-200 hover:scale-[1.01];
+  }
+
+  /* Form input — consistent styling across login, signup, create post */
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-brand-primary
+           bg-brand-cream text-brand-dark placeholder-brand-primary/60
+           focus:outline-none focus:ring-2 focus:ring-brand-accent
+           transition-all duration-200 font-sans;
+  }
+
+  /* Form label */
+  .input-label {
+    @apply block text-brand-dark font-medium mb-1 text-sm font-sans;
+  }
+
+  /* Error message text */
+  .error-text {
+    @apply text-red-600 text-sm mt-1;
+  }
+
+  /* Feed sidebar nav icon button */
+  .sidebar-icon {
+    @apply w-14 h-14 rounded-xl flex items-center justify-center
+           transition-all duration-200 cursor-pointer
+           hover:scale-110 hover:shadow-lg active:scale-95;
+  }
+}

@@ -1,0 +1,49 @@
+// prisma/schema.prisma — PostgreSQL Database Schema
+//
+// Prisma uses this file to:
+//   1. Define the structure of your PostgreSQL database tables
+//   2. Generate a type-safe Prisma Client for querying
+//   3. Create and apply database migrations
+//
+// After editing this file, always run:
+//   npx prisma migrate dev --name <description>
+//   npx prisma generate
+//
+// ADMS Note: PostgreSQL is used for structured, relational user data.
+// The User table has:
+//   - Strict data types and constraints (unique, not null)
+//   - Auto-incrementing primary key
+//   - Timestamps for auditing
+
+// ─────────────────────────────────────────────
+// Datasource — tells Prisma to use PostgreSQL
+// DATABASE_URL is read from your .env file
+// ─────────────────────────────────────────────
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// Generator — produces the Prisma Client library
+// Run `npx prisma generate` after any schema change
+// ─────────────────────────────────────────────
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ─────────────────────────────────────────────
+// User Model — maps to the `users` table in PostgreSQL
+// ─────────────────────────────────────────────
+model User {
+  id        Int      @id @default(autoincrement()) // Primary key, auto-increments
+  username  String   @unique                        // Must be unique across all users
+  email     String   @unique                        // Must be unique across all users
+  fullName  String                                  // Display name
+  password  String                                  // bcrypt hash — NEVER store plaintext
+  bio       String?  @default("")                   // Optional profile bio
+  createdAt DateTime @default(now())                // Account creation timestamp
+  updatedAt DateTime @updatedAt                     // Auto-updated on any change
+
+  @@map("users") // Name of the actual PostgreSQL table
+}
