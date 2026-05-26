@@ -63,3 +63,6 @@ coverage/
 
 # Old project backup
 old_project_backup/
+
+# Temporary local testing
+page-testing/
