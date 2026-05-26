@@ -29,12 +29,17 @@ const neo4j = require("neo4j-driver");
 let driver; // The driver instance — shared across the app
 
 const connectNeo4j = async () => {
+  if (!process.env.NEO4J_URI || !process.env.NEO4J_USERNAME || !process.env.NEO4J_PASSWORD) {
+    console.warn("⚠️ Neo4j environment variables missing. Neo4j integration is disabled.");
+    return;
+  }
+
   try {
     driver = neo4j.driver(
-      process.env.NEO4J_URI || "bolt://localhost:7687",
+      process.env.NEO4J_URI,
       neo4j.auth.basic(
-        process.env.NEO4J_USERNAME || "neo4j",
-        process.env.NEO4J_PASSWORD || "password"
+        process.env.NEO4J_USERNAME,
+        process.env.NEO4J_PASSWORD
       )
     );
 
@@ -52,13 +57,17 @@ const connectNeo4j = async () => {
  *
  * Usage in other files:
  *   const { getDriver } = require('../config/neo4j');
- *   const session = getDriver().session();
- *   await session.run("MATCH (n) RETURN n LIMIT 1");
- *   await session.close();
+ *   const driver = getDriver();
+ *   if (driver) {
+ *     const session = driver.session();
+ *     await session.run("MATCH (n) RETURN n LIMIT 1");
+ *     await session.close();
+ *   }
  */
 const getDriver = () => {
   if (!driver) {
-    throw new Error("Neo4j driver not initialized. Call connectNeo4j() first.");
+    console.warn("⚠️ Neo4j driver not initialized (possibly disabled).");
+    return null;
   }
   return driver;
 };
