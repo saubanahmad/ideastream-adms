@@ -26,6 +26,7 @@ const commentRoutes = require("./routes/comment.routes");
 const voteRoutes = require("./routes/vote.routes");
 const feedRoutes = require("./routes/feed.routes");
 const followRoutes = require("./routes/follow.routes");
+const userRoutes = require("./routes/user.routes");
 
 // --- Middleware imports ---
 const errorMiddleware = require("./middleware/error.middleware");
@@ -90,6 +91,7 @@ app.use("/api/posts", commentRoutes);  // /api/posts/:id/comments
 app.use("/api/posts", voteRoutes);     // /api/posts/:id/vote
 app.use("/api/feed", feedRoutes);
 app.use("/api/follow", followRoutes);
+app.use("/api/users", userRoutes);
 
 // ─────────────────────────────────────────────
 // 404 Handler
