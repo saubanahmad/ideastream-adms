@@ -1,61 +1,36 @@
-/**
- * src/pages/Home.jsx — Main IdeaStream Feed (Global)
- *
- * This is the main page users see after logging in.
- * It shows the global IdeaStream feed (all posts from all platforms).
- *
- * Phase 1: Shows the layout with a welcome message and empty state.
- * Phase 3: Wires up to GET /api/feed for real posts.
- *
- * Layout:
- *   - Left: FeedSidebar (fixed, from component)
- *   - Top: Navbar (fixed, from component)
- *   - Center (64%): CreatePost + Feed list
- *   - Right (36%): "Who to follow" suggestions panel
- */
-
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import FeedSidebar from '../components/FeedSidebar';
 import CreatePost from '../components/CreatePost';
 import PostCard from '../components/PostCard';
-
-// Placeholder posts for Phase 1 — removed in Phase 3 when real API is wired
-const PLACEHOLDER_POSTS = [
-  {
-    _id: '1',
-    title: 'Vertical Farming in Urban Apartments',
-    content: 'What if we converted unused balcony space into hydroponic micro-farms? A single 2m² setup could produce 30% of a family\'s vegetable needs year-round.',
-    feed: 'Cultivate',
-    authorUsername: 'greenthumb99',
-    upvoteCount: 42,
-    downvoteCount: 3,
-    comments: [],
-  },
-  {
-    _id: '2',
-    title: 'AI-powered Pothole Detection System',
-    content: 'Using computer vision on dashcam footage to automatically report pothole locations to city councils. Crowd-sourced road maintenance!',
-    feed: 'Urban Core',
-    authorUsername: 'devstorm',
-    upvoteCount: 89,
-    downvoteCount: 7,
-    comments: [{}, {}],
-  },
-  {
-    _id: '3',
-    title: 'Open Source EV Conversion Kit',
-    content: 'A standardized, affordable kit for converting any ICE vehicle to electric. All schematics open-sourced on GitHub.',
-    feed: 'FastLane',
-    authorUsername: 'sparky_ev',
-    upvoteCount: 156,
-    downvoteCount: 12,
-    comments: [{}, {}, {}],
-  },
-];
+import api from '../api/axios';
 
 const Home = () => {
   const { user } = useAuth();
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setIsLoading(true);
+        const { data } = await api.get('/posts');
+        setPosts(data.data);
+        setError(null);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to load posts from the server.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  const handleNewPost = (newPost) => {
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
+  };
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -81,7 +56,7 @@ const Home = () => {
           </div>
 
           {/* Create post area */}
-          <CreatePost />
+          <CreatePost onPostCreated={handleNewPost} />
 
           {/* Feed Toggle (Latest / Trending) */}
           <div className="flex gap-3 mb-5">
@@ -93,18 +68,33 @@ const Home = () => {
             </button>
           </div>
 
-          {/* Feed notice for Phase 1 */}
-          <div className="bg-brand-primary/20 border border-brand-primary/40 rounded-xl
-                          px-4 py-3 mb-4 text-brand-primary text-sm font-sans">
-            ℹ️ Placeholder posts shown below. Real posts from MongoDB will appear in Phase 3.
-          </div>
+          {/* Feed States */}
+          {isLoading && (
+            <div className="text-brand-primary text-center py-10 font-sans">
+              <span className="animate-pulse">Loading posts...</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/50 rounded-xl px-4 py-3 mb-4 text-red-700 text-sm font-sans text-center">
+              ❌ {error}
+            </div>
+          )}
+
+          {!isLoading && !error && posts.length === 0 && (
+            <div className="text-center py-10 text-brand-primary/60 font-sans">
+              No posts found. Be the first to share an idea!
+            </div>
+          )}
 
           {/* Post list */}
-          <div>
-            {PLACEHOLDER_POSTS.map((post) => (
-              <PostCard key={post._id} post={post} />
-            ))}
-          </div>
+          {!isLoading && !error && (
+            <div>
+              {posts.map((post) => (
+                <PostCard key={post._id} post={post} />
+              ))}
+            </div>
+          )}
         </section>
 
         {/* ── Right Panel — "Who to Follow" (35%) ── */}

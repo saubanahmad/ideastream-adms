@@ -27,9 +27,16 @@ pnpm-debug.log*
 
 # Database dumps/backups
 *.sql
+!backend/prisma/migrations/**/*.sql
 *.dump
 *.bak
 *.tar
+
+# IDEs and Editors
+.idea/
+.vscode/
+.gemini/
+*.iml
 
 # Local DB data folders (if initialized locally in the project)
 data/
