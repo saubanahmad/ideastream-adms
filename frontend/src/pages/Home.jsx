@@ -12,6 +12,12 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Suggestions state
+  const [suggestions, setSuggestions] = useState([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(true);
+  const [suggestionsError, setSuggestionsError] = useState(null);
+  const [followingId, setFollowingId] = useState(null);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -25,11 +31,40 @@ const Home = () => {
         setIsLoading(false);
       }
     };
+
+    const fetchSuggestions = async () => {
+      try {
+        setIsLoadingSuggestions(true);
+        const { data } = await api.get('/users/suggestions');
+        console.log("FETCHED SUGGESTIONS FROM BACKEND:", data.data);
+        setSuggestions(data.data || []);
+        setSuggestionsError(null);
+      } catch (err) {
+        setSuggestionsError('Failed to load suggestions.');
+      } finally {
+        setIsLoadingSuggestions(false);
+      }
+    };
+
     fetchPosts();
+    fetchSuggestions();
   }, []);
 
   const handleNewPost = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
+  };
+
+  const handleFollow = async (userId) => {
+    try {
+      setFollowingId(userId);
+      await api.post(`/users/${userId}/follow`);
+      // Remove followed user from suggestions
+      setSuggestions((prev) => prev.filter((u) => u.id !== userId));
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to follow user.');
+    } finally {
+      setFollowingId(null);
+    }
   };
 
   return (
@@ -106,24 +141,41 @@ const Home = () => {
               <h3 className="font-display text-brand-cream text-lg font-semibold mb-4">
                 👥 Who to Follow
               </h3>
-              <div className="space-y-3">
-                {['alice_builds', 'robo_raj', 'farm_frank'].map((u) => (
-                  <div key={u} className="flex items-center justify-between">
-                    <div>
-                      <p className="text-brand-cream font-display text-sm">{u}</p>
-                      <p className="text-brand-cream/50 text-xs">Idea creator</p>
+              
+              {isLoadingSuggestions && (
+                <p className="text-brand-cream/70 text-sm animate-pulse">Loading suggestions...</p>
+              )}
+
+              {suggestionsError && (
+                <p className="text-red-300 text-sm">❌ {suggestionsError}</p>
+              )}
+
+              {!isLoadingSuggestions && !suggestionsError && suggestions.length === 0 && (
+                <p className="text-brand-cream/70 text-sm">No suggestions right now.</p>
+              )}
+
+              {!isLoadingSuggestions && !suggestionsError && suggestions.length > 0 && (
+                <div className="space-y-3">
+                  {suggestions.map((u) => (
+                    <div key={u.id} className="flex items-center justify-between">
+                      <div className="min-w-0 pr-2">
+                        <p className="text-brand-cream font-display text-sm truncate">{u.username}</p>
+                        <p className="text-brand-cream/50 text-xs truncate">{u.email || 'Idea creator'}</p>
+                      </div>
+                      <button 
+                        onClick={() => handleFollow(u.id)}
+                        disabled={followingId === u.id}
+                        className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 ${
+                          followingId === u.id
+                            ? 'bg-brand-light/50 text-brand-cream/70 cursor-not-allowed'
+                            : 'bg-brand-primary hover:bg-brand-light text-brand-cream'
+                        }`}>
+                        {followingId === u.id ? '...' : 'Follow'}
+                      </button>
                     </div>
-                    <button className="text-xs bg-brand-primary hover:bg-brand-light
-                                       text-brand-cream px-3 py-1 rounded-full
-                                       transition-colors duration-200">
-                      Follow
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <p className="text-brand-cream/40 text-xs mt-4 font-sans">
-                Follow recommendations from Neo4j coming in Phase 4.
-              </p>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Platform stats card */}

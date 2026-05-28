@@ -46,20 +46,21 @@ const register = async ({ username, email, fullName, password }) => {
   });
 
   // 4. Create a User node in Neo4j (optional)
-  if (process.env.NEO4J_URI) {
-    try {
-      const driver = getDriver();
+  try {
+    const driver = getDriver();
+    if (driver) {
       const session = driver.session();
       await session.run(
-        'CREATE (:User {username: $username, userId: $userId})',
-        { username: user.username, userId: String(user.id) }
+        `MERGE (u:User {userId: $userId})
+         SET u.username = $username, u.email = $email`,
+        { username: user.username, email: user.email, userId: String(user.id) }
       );
       await session.close();
-    } catch (err) {
-      console.error("❌ Failed to create Neo4j user:", err.message);
+    } else {
+      console.warn("⚠️ Skipping Neo4j user creation (Neo4j driver not initialized)");
     }
-  } else {
-    console.warn("⚠️ Skipping Neo4j user creation (NEO4J_URI not set)");
+  } catch (err) {
+    console.error("❌ Failed to create/update Neo4j user:", err.message);
   }
 
   // 5. Log to MongoDB activity log (optional)
