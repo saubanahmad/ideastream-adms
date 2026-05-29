@@ -70,10 +70,10 @@ const App = () => {
       <Route
         path="*"
         element={
-          <div className="min-h-screen bg-brand-cream flex items-center justify-center">
+          <div className="min-h-screen bg-brand-background flex items-center justify-center">
             <div className="text-center">
-              <h1 className="font-display text-brand-accent text-6xl font-bold">404</h1>
-              <p className="text-brand-primary text-lg mt-2">Page not found</p>
+              <h1 className="font-display text-brand-brandDark text-6xl font-bold">404</h1>
+              <p className="text-brand-muted text-lg mt-2">Page not found</p>
               <a href="/home" className="btn-primary inline-block mt-4">Go Home</a>
             </div>
           </div>

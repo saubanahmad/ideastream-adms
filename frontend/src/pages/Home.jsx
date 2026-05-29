@@ -68,7 +68,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-cream">
+    <div className="min-h-screen bg-brand-background">
 
       {/* Fixed elements */}
       <FeedSidebar />
@@ -81,11 +81,11 @@ const Home = () => {
         <section className="flex-1 max-w-2xl px-6 py-6">
 
           {/* Welcome banner */}
-          <div className="bg-brand-accent rounded-2xl p-5 mb-6 shadow-md">
-            <h2 className="font-display text-brand-cream text-2xl font-semibold">
+          <div className="card mb-6">
+            <h2 className="font-display text-brand-text text-2xl font-semibold">
               Welcome back, {user?.username}! 👋
             </h2>
-            <p className="text-brand-cream/70 text-sm mt-1 font-sans">
+            <p className="text-brand-muted text-sm mt-1 font-sans">
               Here are the latest ideas from all communities.
             </p>
           </div>
@@ -105,7 +105,7 @@ const Home = () => {
 
           {/* Feed States */}
           {isLoading && (
-            <div className="text-brand-primary text-center py-10 font-sans">
+            <div className="text-brand-muted text-center py-10 font-sans">
               <span className="animate-pulse">Loading posts...</span>
             </div>
           )}
@@ -117,7 +117,7 @@ const Home = () => {
           )}
 
           {!isLoading && !error && posts.length === 0 && (
-            <div className="text-center py-10 text-brand-primary/60 font-sans">
+            <div className="text-center py-10 text-brand-muted/80 font-sans">
               No posts found. Be the first to share an idea!
             </div>
           )}
@@ -137,21 +137,21 @@ const Home = () => {
           <div className="sticky top-20">
 
             {/* Suggestions card */}
-            <div className="bg-brand-accent rounded-2xl p-5 shadow-md">
-              <h3 className="font-display text-brand-cream text-lg font-semibold mb-4">
+            <div className="card">
+              <h3 className="font-display text-brand-text text-lg font-semibold mb-4">
                 👥 Who to Follow
               </h3>
               
               {isLoadingSuggestions && (
-                <p className="text-brand-cream/70 text-sm animate-pulse">Loading suggestions...</p>
+                <p className="text-brand-muted text-sm animate-pulse">Loading suggestions...</p>
               )}
 
               {suggestionsError && (
-                <p className="text-red-300 text-sm">❌ {suggestionsError}</p>
+                <p className="text-red-500 text-sm">❌ {suggestionsError}</p>
               )}
 
               {!isLoadingSuggestions && !suggestionsError && suggestions.length === 0 && (
-                <p className="text-brand-cream/70 text-sm">No suggestions right now.</p>
+                <p className="text-brand-muted text-sm">No suggestions right now.</p>
               )}
 
               {!isLoadingSuggestions && !suggestionsError && suggestions.length > 0 && (
@@ -159,16 +159,16 @@ const Home = () => {
                   {suggestions.map((u) => (
                     <div key={u.id} className="flex items-center justify-between">
                       <div className="min-w-0 pr-2">
-                        <p className="text-brand-cream font-display text-sm truncate">{u.username}</p>
-                        <p className="text-brand-cream/50 text-xs truncate">{u.email || 'Idea creator'}</p>
+                        <p className="text-brand-text font-display text-sm truncate font-semibold">{u.username}</p>
+                        <p className="text-brand-muted text-xs truncate">{u.email || 'Idea creator'}</p>
                       </div>
                       <button 
                         onClick={() => handleFollow(u.id)}
                         disabled={followingId === u.id}
-                        className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 ${
+                        className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 border ${
                           followingId === u.id
-                            ? 'bg-brand-light/50 text-brand-cream/70 cursor-not-allowed'
-                            : 'bg-brand-primary hover:bg-brand-light text-brand-cream'
+                            ? 'bg-brand-surface text-brand-muted border-transparent cursor-not-allowed'
+                            : 'bg-brand-surface border-brand-border hover:bg-brand-border text-brand-text'
                         }`}>
                         {followingId === u.id ? '...' : 'Follow'}
                       </button>
@@ -179,15 +179,15 @@ const Home = () => {
             </div>
 
             {/* Platform stats card */}
-            <div className="bg-brand-primary rounded-2xl p-5 shadow-md mt-4">
-              <h3 className="font-display text-brand-cream text-base font-semibold mb-3">
+            <div className="card mt-4">
+              <h3 className="font-display text-brand-text text-base font-semibold mb-3">
                 🌐 Active Communities
               </h3>
               <div className="grid grid-cols-3 gap-2">
                 {['💡', '🌱', '💻', '🚗', '🚀', '🧬', '🎮', '🤖', '🏙️'].map((emoji, i) => (
                   <div key={i}
-                    className="bg-brand-dark/40 rounded-lg p-2 text-center text-xl
-                                hover:bg-brand-accent/60 transition-colors cursor-pointer">
+                    className="bg-brand-surface border border-brand-border rounded-lg p-2 text-center text-xl
+                                hover:bg-brand-border transition-colors cursor-pointer">
                     {emoji}
                   </div>
                 ))}
