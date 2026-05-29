@@ -11,6 +11,28 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { FEEDS } from '../utils/feedList';
 
+import ideaStreamShortIcon from "../assets/icons/is-short.svg";
+import cultivateShortIcon from "../assets/icons/C-short.svg";
+import digitalFrontierShortIcon from "../assets/icons/DF-short.svg";
+import fastLaneShortIcon from "../assets/icons/FL-short.svg";
+import launchPadShortIcon from "../assets/icons/LP-short.svg";
+import lifeScienceShortIcon from "../assets/icons/LS-short.svg";
+import playLabShortIcon from "../assets/icons/PL-short.svg";
+import tangibleTechShortIcon from "../assets/icons/TT-short.svg";
+import urbanCoreShortIcon from "../assets/icons/UC-short.svg";
+
+const ICONS = {
+  'ideastream': ideaStreamShortIcon,
+  'cultivate': cultivateShortIcon,
+  'digital-frontier': digitalFrontierShortIcon,
+  'fastlane': fastLaneShortIcon,
+  'launchpad': launchPadShortIcon,
+  'lifescience': lifeScienceShortIcon,
+  'playlab': playLabShortIcon,
+  'tangible-tech': tangibleTechShortIcon,
+  'urban-core': urbanCoreShortIcon,
+};
+
 const FeedSidebar = () => {
   const navigate = useNavigate();
   const { feedId } = useParams(); // Currently active feed from URL
@@ -36,8 +58,8 @@ const FeedSidebar = () => {
                         }
                         active:scale-95 cursor-pointer outline-none`}
           >
-            <span role="img" aria-label={feed.label}>
-              {feed.emoji}
+            <span role="img" aria-label={feed.label} className="flex items-center justify-center">
+              <img src={ICONS[feed.id]} alt={feed.label} className="h-10 w-10 object-contain" />
             </span>
           </button>
         );

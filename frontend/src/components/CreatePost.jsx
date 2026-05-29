@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import api from '../api/axios';
-
-const FEED_LIST = [
-  'IdeaStream', 'Cultivate', 'Urban Core', 'FastLane', 'HealthSpan',
-  'CodeCraft', 'ByteBeat', 'MindMeld', 'Polyglot'
-];
+import { FEEDS } from '../utils/feedList';
 
 const CreatePost = ({ onPostCreated }) => {
   const [title, setTitle] = useState('');
@@ -83,8 +79,8 @@ const CreatePost = ({ onPostCreated }) => {
               onChange={(e) => setFeed(e.target.value)}
               disabled={isLoading}
             >
-              {FEED_LIST.map(f => (
-                <option key={f} value={f}>{f}</option>
+              {FEEDS.map(f => (
+                <option key={f.apiValue} value={f.apiValue}>{f.label}</option>
               ))}
             </select>
           </div>

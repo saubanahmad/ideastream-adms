@@ -9,6 +9,9 @@ router.get("/search", protect, userController.searchUsers);
 // GET /api/users/suggestions
 router.get("/suggestions", protect, userController.getSuggestions);
 
+// GET /api/users/pending-follow-backs
+router.get("/pending-follow-backs", protect, userController.getPendingFollowBacks);
+
 // GET /api/users/:id/social-counts
 router.get("/:id/social-counts", userController.getSocialCounts);
 

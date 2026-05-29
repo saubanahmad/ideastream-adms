@@ -11,6 +11,9 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
+import ideaStreamLogo from '../assets/icons/ideastream.svg';
+import followingIcon from '../assets/icons/following.svg';
+import logoutIcon from '../assets/icons/logout.svg';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -83,8 +86,8 @@ const Navbar = () => {
       {/* Left: Logo + Search */}
       <div className="flex items-center gap-4">
         {/* Logo text */}
-        <Link to="/home" className="font-display text-brand-text text-xl font-semibold tracking-wide">
-          IdeaStream
+        <Link to="/home" className="flex items-center">
+          <img src={ideaStreamLogo} alt="IdeaStream" className="h-8 w-auto" />
         </Link>
 
         {/* Search bar */}
@@ -103,9 +106,6 @@ const Navbar = () => {
                        focus:outline-none focus:ring-2 focus:ring-brand-primary
                        transition-all duration-200"
           />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted text-sm pointer-events-none">
-            🔍
-          </span>
 
           {/* Search Dropdown */}
           {showDropdown && searchQuery.trim().length > 0 && (
@@ -159,36 +159,23 @@ const Navbar = () => {
           </Link>
         )}
 
-        {/* Create idea button */}
-        <Link to="/home">
-          <button
-            className="text-brand-text text-xl hover:scale-110 active:scale-95 hover:text-brand-primary
-                       transition-transform duration-150"
-            title="Create Idea"
-          >
-            ✏️
-          </button>
-        </Link>
-
         {/* Following page */}
         <Link to="/following">
           <button
-            className="text-brand-text text-xl hover:scale-110 active:scale-95 hover:text-brand-primary
-                       transition-transform duration-150"
+            className="hover:scale-110 active:scale-95 transition-transform duration-150 flex items-center justify-center"
             title="Following"
           >
-            👥
+            <img src={followingIcon} alt="Following" className="h-6 w-6" />
           </button>
         </Link>
 
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="text-brand-text text-xl hover:scale-110 active:scale-95 hover:text-brand-primary
-                     transition-transform duration-150"
+          className="hover:scale-110 active:scale-95 transition-transform duration-150 flex items-center justify-center"
           title="Logout"
         >
-          🚪
+          <img src={logoutIcon} alt="Logout" className="h-6 w-6" />
         </button>
       </div>
     </header>
