@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import FeedSidebar from '../components/FeedSidebar';
 import CreatePost from '../components/CreatePost';
@@ -7,7 +6,6 @@ import PostCard from '../components/PostCard';
 import api from '../api/axios';
 
 const Home = () => {
-  const { user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,6 +15,11 @@ const Home = () => {
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(true);
   const [suggestionsError, setSuggestionsError] = useState(null);
   const [followingId, setFollowingId] = useState(null);
+
+  // Placeholder state for pending follow backs
+  const [pendingFollowBacks, setPendingFollowBacks] = useState([]);
+  const [isLoadingPending, setIsLoadingPending] = useState(false);
+  const [pendingError, setPendingError] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -46,20 +49,38 @@ const Home = () => {
       }
     };
 
+    const fetchPendingFollowBacks = async () => {
+      try {
+        setIsLoadingPending(true);
+        const { data } = await api.get('/users/pending-follow-backs');
+        setPendingFollowBacks(data.data || []);
+        setPendingError(null);
+      } catch (err) {
+        setPendingError('Failed to load pending follows.');
+      } finally {
+        setIsLoadingPending(false);
+      }
+    };
+
     fetchPosts();
     fetchSuggestions();
+    fetchPendingFollowBacks();
   }, []);
 
   const handleNewPost = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
 
-  const handleFollow = async (userId) => {
+  const handleFollow = async (userId, isFollowBack = false) => {
     try {
       setFollowingId(userId);
       await api.post(`/users/${userId}/follow`);
-      // Remove followed user from suggestions
-      setSuggestions((prev) => prev.filter((u) => u.id !== userId));
+      // Remove followed user from suggestions or pending
+      if (isFollowBack) {
+        setPendingFollowBacks((prev) => prev.filter((u) => u.id !== userId));
+      } else {
+        setSuggestions((prev) => prev.filter((u) => u.id !== userId));
+      }
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to follow user.');
     } finally {
@@ -68,7 +89,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-cream">
+    <div className="min-h-screen bg-brand-background">
 
       {/* Fixed elements */}
       <FeedSidebar />
@@ -80,15 +101,7 @@ const Home = () => {
         {/* ── Center Feed (65%) ── */}
         <section className="flex-1 max-w-2xl px-6 py-6">
 
-          {/* Welcome banner */}
-          <div className="bg-brand-accent rounded-2xl p-5 mb-6 shadow-md">
-            <h2 className="font-display text-brand-cream text-2xl font-semibold">
-              Welcome back, {user?.username}! 👋
-            </h2>
-            <p className="text-brand-cream/70 text-sm mt-1 font-sans">
-              Here are the latest ideas from all communities.
-            </p>
-          </div>
+
 
           {/* Create post area */}
           <CreatePost onPostCreated={handleNewPost} />
@@ -96,16 +109,16 @@ const Home = () => {
           {/* Feed Toggle (Latest / Trending) */}
           <div className="flex gap-3 mb-5">
             <button className="btn-primary text-sm px-5 py-2">
-              ⏱ Latest
+              Latest
             </button>
             <button className="btn-secondary text-sm px-5 py-2">
-              🔥 Trending
+              Trending
             </button>
           </div>
 
           {/* Feed States */}
           {isLoading && (
-            <div className="text-brand-primary text-center py-10 font-sans">
+            <div className="text-brand-muted text-center py-10 font-sans">
               <span className="animate-pulse">Loading posts...</span>
             </div>
           )}
@@ -117,7 +130,7 @@ const Home = () => {
           )}
 
           {!isLoading && !error && posts.length === 0 && (
-            <div className="text-center py-10 text-brand-primary/60 font-sans">
+            <div className="text-center py-10 text-brand-muted/80 font-sans">
               No posts found. Be the first to share an idea!
             </div>
           )}
@@ -137,21 +150,21 @@ const Home = () => {
           <div className="sticky top-20">
 
             {/* Suggestions card */}
-            <div className="bg-brand-accent rounded-2xl p-5 shadow-md">
-              <h3 className="font-display text-brand-cream text-lg font-semibold mb-4">
-                👥 Who to Follow
+            <div className="card">
+              <h3 className="font-display text-brand-text text-lg font-semibold mb-4">
+                Who to Follow
               </h3>
               
               {isLoadingSuggestions && (
-                <p className="text-brand-cream/70 text-sm animate-pulse">Loading suggestions...</p>
+                <p className="text-brand-muted text-sm animate-pulse">Loading suggestions...</p>
               )}
 
               {suggestionsError && (
-                <p className="text-red-300 text-sm">❌ {suggestionsError}</p>
+                <p className="text-red-500 text-sm">❌ {suggestionsError}</p>
               )}
 
               {!isLoadingSuggestions && !suggestionsError && suggestions.length === 0 && (
-                <p className="text-brand-cream/70 text-sm">No suggestions right now.</p>
+                <p className="text-brand-muted text-sm">No suggestions right now.</p>
               )}
 
               {!isLoadingSuggestions && !suggestionsError && suggestions.length > 0 && (
@@ -159,16 +172,16 @@ const Home = () => {
                   {suggestions.map((u) => (
                     <div key={u.id} className="flex items-center justify-between">
                       <div className="min-w-0 pr-2">
-                        <p className="text-brand-cream font-display text-sm truncate">{u.username}</p>
-                        <p className="text-brand-cream/50 text-xs truncate">{u.email || 'Idea creator'}</p>
+                        <p className="text-brand-text font-display text-sm truncate font-semibold">{u.username}</p>
+                        <p className="text-brand-muted text-xs truncate">{u.email || 'Idea creator'}</p>
                       </div>
                       <button 
                         onClick={() => handleFollow(u.id)}
                         disabled={followingId === u.id}
-                        className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 ${
+                        className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 border ${
                           followingId === u.id
-                            ? 'bg-brand-light/50 text-brand-cream/70 cursor-not-allowed'
-                            : 'bg-brand-primary hover:bg-brand-light text-brand-cream'
+                            ? 'bg-brand-surface text-brand-muted border-transparent cursor-not-allowed'
+                            : 'bg-brand-surface border-brand-border hover:bg-brand-border text-brand-text'
                         }`}>
                         {followingId === u.id ? '...' : 'Follow'}
                       </button>
@@ -178,20 +191,46 @@ const Home = () => {
               )}
             </div>
 
-            {/* Platform stats card */}
-            <div className="bg-brand-primary rounded-2xl p-5 shadow-md mt-4">
-              <h3 className="font-display text-brand-cream text-base font-semibold mb-3">
-                🌐 Active Communities
+            {/* Followers You Don't Follow Back card */}
+            <div className="card mt-4">
+              <h3 className="font-display text-brand-text text-lg font-semibold mb-4">
+                Followers You Don't Follow Back
               </h3>
-              <div className="grid grid-cols-3 gap-2">
-                {['💡', '🌱', '💻', '🚗', '🚀', '🧬', '🎮', '🤖', '🏙️'].map((emoji, i) => (
-                  <div key={i}
-                    className="bg-brand-dark/40 rounded-lg p-2 text-center text-xl
-                                hover:bg-brand-accent/60 transition-colors cursor-pointer">
-                    {emoji}
-                  </div>
-                ))}
-              </div>
+
+              {isLoadingPending && (
+                <p className="text-brand-muted text-sm animate-pulse">Loading...</p>
+              )}
+
+              {pendingError && (
+                <p className="text-red-500 text-sm">{pendingError}</p>
+              )}
+
+              {!isLoadingPending && !pendingError && pendingFollowBacks.length === 0 && (
+                <p className="text-brand-muted text-sm">No pending follow backs.</p>
+              )}
+
+              {!isLoadingPending && !pendingError && pendingFollowBacks.length > 0 && (
+                <div className="space-y-3">
+                  {pendingFollowBacks.map((u) => (
+                    <div key={u.id} className="flex items-center justify-between">
+                      <div className="min-w-0 pr-2">
+                        <p className="text-brand-text font-display text-sm truncate font-semibold">{u.username}</p>
+                        <p className="text-brand-muted text-xs truncate">Follows you</p>
+                      </div>
+                      <button 
+                        onClick={() => handleFollow(u.id, true)}
+                        disabled={followingId === u.id}
+                        className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 border ${
+                          followingId === u.id
+                            ? 'bg-brand-surface text-brand-muted border-transparent cursor-not-allowed'
+                            : 'bg-brand-surface border-brand-border hover:bg-brand-border text-brand-text'
+                        }`}>
+                        {followingId === u.id ? '...' : 'Follow Back'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
           </div>

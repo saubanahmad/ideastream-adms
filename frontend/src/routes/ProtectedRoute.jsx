@@ -24,8 +24,8 @@ const ProtectedRoute = ({ children }) => {
   // While checking auth state on app startup, show a simple loading screen
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-brand-cream">
-        <div className="text-brand-accent font-display text-2xl animate-pulse">
+      <div className="min-h-screen flex items-center justify-center bg-brand-background">
+        <div className="text-brand-primary font-display text-2xl animate-pulse">
           Loading IdeaStream...
         </div>
       </div>

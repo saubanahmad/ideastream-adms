@@ -11,6 +11,9 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
+import ideaStreamLogo from '../assets/icons/ideastream.svg';
+import followingIcon from '../assets/icons/following.svg';
+import logoutIcon from '../assets/icons/logout.svg';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -78,13 +81,13 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-20 right-0 h-14 bg-brand-accent z-30 flex items-center justify-between px-6 shadow-md">
+    <header className="fixed top-0 left-20 right-0 h-14 bg-brand-surface border-b border-brand-border z-30 flex items-center justify-between px-6 shadow-sm">
 
       {/* Left: Logo + Search */}
       <div className="flex items-center gap-4">
         {/* Logo text */}
-        <Link to="/home" className="font-display text-brand-cream text-xl font-semibold tracking-wide">
-          IdeaStream
+        <Link to="/home" className="flex items-center">
+          <img src={ideaStreamLogo} alt="IdeaStream" className="h-8 w-auto" />
         </Link>
 
         {/* Search bar */}
@@ -98,43 +101,40 @@ const Navbar = () => {
             }}
             onFocus={() => setShowDropdown(true)}
             placeholder="Search users..."
-            className="w-64 px-4 py-1.5 rounded-full bg-brand-primary/60 text-brand-cream
-                       placeholder-brand-cream/60 text-sm border border-brand-primary
-                       focus:outline-none focus:ring-2 focus:ring-brand-cream/40
+            className="w-64 px-4 py-1.5 rounded-full bg-brand-background text-brand-text
+                       placeholder:text-brand-muted text-sm border border-brand-border
+                       focus:outline-none focus:ring-2 focus:ring-brand-primary
                        transition-all duration-200"
           />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-cream/60 text-sm pointer-events-none">
-            🔍
-          </span>
 
           {/* Search Dropdown */}
           {showDropdown && searchQuery.trim().length > 0 && (
-            <div className="absolute top-full left-0 mt-2 w-72 bg-brand-accent rounded-xl shadow-lg border border-brand-cream/10 overflow-hidden z-50">
+            <div className="absolute top-full left-0 mt-2 w-72 bg-brand-card rounded-xl shadow-lg border border-brand-border overflow-hidden z-50">
               {isSearching ? (
-                <div className="p-4 text-center text-brand-cream/70 text-sm animate-pulse">
+                <div className="p-4 text-center text-brand-muted text-sm animate-pulse">
                   Searching...
                 </div>
               ) : searchResults.length === 0 ? (
-                <div className="p-4 text-center text-brand-cream/70 text-sm">
+                <div className="p-4 text-center text-brand-muted text-sm">
                   No users found.
                 </div>
               ) : (
                 <div className="max-h-80 overflow-y-auto">
                   {searchResults.map(u => (
-                    <div key={u.id} className="flex items-center justify-between p-3 hover:bg-brand-primary/30 transition-colors border-b border-brand-cream/5 last:border-0">
+                    <div key={u.id} className="flex items-center justify-between p-3 hover:bg-brand-surface transition-colors border-b border-brand-border last:border-0">
                       <div className="min-w-0 pr-3">
-                        <p className="text-brand-cream font-display text-sm truncate font-semibold">{u.username}</p>
-                        <p className="text-brand-cream/50 text-xs truncate">{u.email || 'Idea creator'}</p>
+                        <p className="text-brand-text font-display text-sm truncate font-semibold">{u.username}</p>
+                        <p className="text-brand-muted text-xs truncate">{u.email || 'Idea creator'}</p>
                       </div>
                       <button 
                         onClick={(e) => !u.isFollowing && handleFollow(e, u.id)}
                         disabled={loadingActionId === u.id || u.isFollowing}
                         className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 border ${
                           loadingActionId === u.id
-                            ? 'bg-brand-light/50 text-brand-cream/70 border-transparent cursor-not-allowed'
+                            ? 'bg-brand-surface text-brand-muted border-transparent cursor-not-allowed'
                             : u.isFollowing
-                              ? 'bg-transparent border-brand-cream/30 text-brand-cream/50 cursor-not-allowed'
-                              : 'bg-brand-primary border-brand-primary hover:bg-brand-light text-brand-cream'
+                              ? 'bg-transparent border-brand-border text-brand-muted cursor-not-allowed'
+                              : 'bg-brand-primary border-brand-primary hover:bg-brand-primaryHover text-brand-text'
                         }`}>
                         {loadingActionId === u.id ? '...' : u.isFollowing ? 'Following' : 'Follow'}
                       </button>
@@ -152,43 +152,30 @@ const Navbar = () => {
         {user && (
           <Link
             to="/profile"
-            className="font-display text-brand-cream text-base hover:text-brand-cream/80
+            className="font-display text-brand-text text-base hover:text-brand-primary
                        transition-colors duration-200 hidden sm:block"
           >
             {user.username}
           </Link>
         )}
 
-        {/* Create idea button */}
-        <Link to="/home">
-          <button
-            className="text-brand-cream text-xl hover:scale-110 active:scale-95
-                       transition-transform duration-150"
-            title="Create Idea"
-          >
-            ✏️
-          </button>
-        </Link>
-
         {/* Following page */}
         <Link to="/following">
           <button
-            className="text-brand-cream text-xl hover:scale-110 active:scale-95
-                       transition-transform duration-150"
+            className="hover:scale-110 active:scale-95 transition-transform duration-150 flex items-center justify-center"
             title="Following"
           >
-            👥
+            <img src={followingIcon} alt="Following" className="h-6 w-6" />
           </button>
         </Link>
 
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="text-brand-cream text-xl hover:scale-110 active:scale-95
-                     transition-transform duration-150"
+          className="hover:scale-110 active:scale-95 transition-transform duration-150 flex items-center justify-center"
           title="Logout"
         >
-          🚪
+          <img src={logoutIcon} alt="Logout" className="h-6 w-6" />
         </button>
       </div>
     </header>
