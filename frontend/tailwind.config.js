@@ -9,14 +9,20 @@ export default {
   theme: {
     extend: {
       // Custom IdeaStream color palette
-      // Based on the original brown/cream brand identity
+      // Updated to Option B: Dark Brown + Muted Teal
       colors: {
         brand: {
-          dark:    '#3B1F0E',   // Darkest brown — sidebar bg
-          primary: '#603F26',   // Medium brown — primary actions
-          accent:  '#914F1E',   // Warm brown — buttons, active states
-          light:   '#C97B3A',   // Light brown — hover states
-          cream:   '#FFEAC5',   // Cream — backgrounds, text on dark
+          black: "#000000",
+          surface: "#1F150C",
+          brown: "#412D15",
+          cream: "#E1DCC9",
+          background: "#000000",
+          card: "#1F150C",
+          border: "#412D15",
+          text: "#E1DCC9",
+          muted: "rgba(225, 220, 201, 0.65)",
+          primary: "#412D15",
+          primaryHover: "#563C1E",
         },
       },
       fontFamily: {

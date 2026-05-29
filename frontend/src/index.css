@@ -21,11 +21,14 @@
    ───────────────────────────────────────────── */
 @layer base {
   :root {
-    --color-dark:    #3B1F0E;
-    --color-primary: #603F26;
-    --color-accent:  #914F1E;
-    --color-light:   #C97B3A;
-    --color-cream:   #FFEAC5;
+    --color-background: #000000;
+    --color-surface: #1F150C;
+    --color-card: #1F150C;
+    --color-border: #412D15;
+    --color-text: #E1DCC9;
+    --color-muted: rgba(225, 220, 201, 0.65);
+    --color-primary: #412D15;
+    --color-primaryHover: #563C1E;
   }
 
   * {
@@ -39,8 +42,8 @@
   }
 
   body {
-    background-color: var(--color-cream);
-    color: var(--color-dark);
+    background-color: var(--color-background);
+    color: var(--color-text);
     font-family: 'Inter', system-ui, sans-serif;
     min-height: 100vh;
   }
@@ -51,16 +54,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--color-cream);
+    background: var(--color-surface);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--color-primary);
+    background: var(--color-muted);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-accent);
+    background: var(--color-primary);
   }
 }
 
@@ -68,45 +71,35 @@
    Component layer — reusable component classes
    ───────────────────────────────────────────── */
 @layer components {
+
   /* Primary button — used for main actions */
   .btn-primary {
-    @apply bg-brand-accent text-brand-cream font-display font-medium
-           px-5 py-2 rounded-full transition-all duration-200
-           hover:bg-brand-light hover:scale-105 active:scale-95
-           disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-brand-primary text-brand-text font-display font-medium px-5 py-2 rounded-full transition-all duration-200 hover:bg-brand-primaryHover hover:scale-[1.02] active:scale-95 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Secondary button — used for less prominent actions */
   .btn-secondary {
-    @apply bg-brand-primary text-brand-cream font-display font-medium
-           px-5 py-2 rounded-full transition-all duration-200
-           hover:bg-brand-accent hover:scale-105 active:scale-95;
+    @apply bg-brand-surface text-brand-text font-display font-medium px-5 py-2 rounded-full transition-all duration-200 border border-brand-border hover:bg-brand-border hover:scale-[1.02] active:scale-95;
   }
 
   /* Ghost button — transparent with border */
   .btn-ghost {
-    @apply border border-brand-primary text-brand-primary font-display
-           px-5 py-2 rounded-full transition-all duration-200
-           hover:bg-brand-primary hover:text-brand-cream hover:scale-105;
+    @apply border border-brand-border text-brand-muted font-display px-5 py-2 rounded-full transition-all duration-200 hover:bg-brand-surface hover:text-brand-text hover:scale-[1.02];
   }
 
-  /* Card — used for posts, user cards, etc. */
+  /* Card — modern clean card */
   .card {
-    @apply bg-brand-accent text-brand-cream rounded-3xl p-5
-           shadow-lg transition-transform duration-200 hover:scale-[1.01];
+    @apply bg-brand-card text-brand-text rounded-2xl p-5 border border-brand-border shadow-sm transition-transform duration-200 hover:shadow-md;
   }
 
-  /* Form input — consistent styling across login, signup, create post */
+  /* Form input — clean white inputs with subtle borders */
   .input-field {
-    @apply w-full px-4 py-3 rounded-xl border border-brand-primary
-           bg-brand-cream text-brand-dark placeholder-brand-primary/60
-           focus:outline-none focus:ring-2 focus:ring-brand-accent
-           transition-all duration-200 font-sans;
+    @apply w-full px-4 py-3 rounded-xl border border-brand-border bg-brand-surface text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all duration-200 font-sans;
   }
 
   /* Form label */
   .input-label {
-    @apply block text-brand-dark font-medium mb-1 text-sm font-sans;
+    @apply block text-brand-text font-medium mb-1 text-sm font-sans;
   }
 
   /* Error message text */
@@ -116,8 +109,6 @@
 
   /* Feed sidebar nav icon button */
   .sidebar-icon {
-    @apply w-14 h-14 rounded-xl flex items-center justify-center
-           transition-all duration-200 cursor-pointer
-           hover:scale-110 hover:shadow-lg active:scale-95;
+    @apply w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 cursor-pointer text-brand-muted hover:scale-110 hover:bg-brand-surface hover:text-brand-primary active:scale-95;
   }
 }

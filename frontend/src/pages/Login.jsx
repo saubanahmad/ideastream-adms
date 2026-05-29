@@ -52,16 +52,16 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-cream flex items-center justify-center px-4">
+    <div className="min-h-screen bg-brand-background flex items-center justify-center px-4">
       {/* Card */}
-      <div className="w-full max-w-md bg-brand-accent rounded-3xl shadow-2xl p-8 md:p-10">
+      <div className="w-full max-w-md bg-brand-card rounded-3xl shadow-sm border border-brand-border p-8 md:p-10">
 
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <h1 className="font-display text-brand-cream text-4xl font-semibold mb-1">
+          <h1 className="font-display text-brand-text text-4xl font-semibold mb-1">
             💡 IdeaStream
           </h1>
-          <p className="text-brand-cream/70 text-sm font-sans">
+          <p className="text-brand-muted text-sm font-sans">
             Welcome back — sign in to continue
           </p>
         </div>
@@ -71,7 +71,7 @@ const Login = () => {
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="input-label text-brand-cream/80">
+            <label htmlFor="email" className="input-label">
               Email
             </label>
             <input
@@ -88,7 +88,7 @@ const Login = () => {
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="input-label text-brand-cream/80">
+            <label htmlFor="password" className="input-label">
               Password
             </label>
             <input
@@ -105,8 +105,8 @@ const Login = () => {
 
           {/* Error message */}
           {error && (
-            <div className="bg-red-900/30 border border-red-500/50 text-red-300 text-sm
-                            px-4 py-2 rounded-xl">
+            <div className="bg-red-50 border border-red-200 text-red-600 text-sm
+                            px-4 py-3 rounded-xl">
               {error}
             </div>
           )}
@@ -123,18 +123,18 @@ const Login = () => {
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-brand-primary/40" />
-          <span className="text-brand-cream/50 text-xs">or</span>
-          <div className="flex-1 h-px bg-brand-primary/40" />
+          <div className="flex-1 h-px bg-brand-border" />
+          <span className="text-brand-muted text-xs">or</span>
+          <div className="flex-1 h-px bg-brand-border" />
         </div>
 
         {/* Sign up link */}
-        <p className="text-center text-brand-cream/70 text-sm font-sans">
+        <p className="text-center text-brand-muted text-sm font-sans">
           New to IdeaStream?{' '}
           <Link
             to="/signup"
-            className="text-brand-cream font-medium underline underline-offset-2
-                       hover:text-brand-cream/80 transition-colors"
+            className="text-brand-primary font-medium underline underline-offset-2
+                       hover:text-brand-primaryHover transition-colors"
           >
             Create an account
           </Link>

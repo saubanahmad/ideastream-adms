@@ -74,16 +74,16 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-cream flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-brand-background flex items-center justify-center px-4 py-10">
       {/* Card */}
-      <div className="w-full max-w-md bg-brand-accent rounded-3xl shadow-2xl p-8 md:p-10">
+      <div className="w-full max-w-md bg-brand-card rounded-3xl shadow-sm border border-brand-border p-8 md:p-10">
 
         {/* Brand */}
         <div className="text-center mb-8">
-          <h1 className="font-display text-brand-cream text-4xl font-semibold mb-1">
+          <h1 className="font-display text-brand-text text-4xl font-semibold mb-1">
             💡 IdeaStream
           </h1>
-          <p className="text-brand-cream/70 text-sm font-sans">
+          <p className="text-brand-muted text-sm font-sans">
             Create your account and start sharing ideas
           </p>
         </div>
@@ -93,7 +93,7 @@ const Signup = () => {
 
           {/* Full Name */}
           <div>
-            <label htmlFor="fullName" className="input-label text-brand-cream/80">Full Name</label>
+            <label htmlFor="fullName" className="input-label">Full Name</label>
             <input
               id="fullName"
               type="text"
@@ -108,7 +108,7 @@ const Signup = () => {
 
           {/* Username */}
           <div>
-            <label htmlFor="username" className="input-label text-brand-cream/80">Username</label>
+            <label htmlFor="username" className="input-label">Username</label>
             <input
               id="username"
               type="text"
@@ -119,14 +119,14 @@ const Signup = () => {
               autoComplete="username"
               className="input-field"
             />
-            <p className="text-brand-cream/50 text-xs mt-1">
+            <p className="text-brand-muted text-xs mt-1">
               Must be unique. Only letters, numbers, and underscores.
             </p>
           </div>
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="input-label text-brand-cream/80">Email</label>
+            <label htmlFor="email" className="input-label">Email</label>
             <input
               id="email"
               type="email"
@@ -141,7 +141,7 @@ const Signup = () => {
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="input-label text-brand-cream/80">Password</label>
+            <label htmlFor="password" className="input-label">Password</label>
             <input
               id="password"
               type="password"
@@ -156,7 +156,7 @@ const Signup = () => {
 
           {/* Confirm Password */}
           <div>
-            <label htmlFor="confirmPassword" className="input-label text-brand-cream/80">
+            <label htmlFor="confirmPassword" className="input-label">
               Confirm Password
             </label>
             <input
@@ -173,8 +173,8 @@ const Signup = () => {
 
           {/* Error */}
           {error && (
-            <div className="bg-red-900/30 border border-red-500/50 text-red-300 text-sm
-                            px-4 py-2 rounded-xl">
+            <div className="bg-red-50 border border-red-200 text-red-600 text-sm
+                            px-4 py-3 rounded-xl">
               {error}
             </div>
           )}
@@ -191,18 +191,18 @@ const Signup = () => {
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-brand-primary/40" />
-          <span className="text-brand-cream/50 text-xs">or</span>
-          <div className="flex-1 h-px bg-brand-primary/40" />
+          <div className="flex-1 h-px bg-brand-border" />
+          <span className="text-brand-muted text-xs">or</span>
+          <div className="flex-1 h-px bg-brand-border" />
         </div>
 
         {/* Login link */}
-        <p className="text-center text-brand-cream/70 text-sm font-sans">
+        <p className="text-center text-brand-muted text-sm font-sans">
           Already have an account?{' '}
           <Link
             to="/login"
-            className="text-brand-cream font-medium underline underline-offset-2
-                       hover:text-brand-cream/80 transition-colors"
+            className="text-brand-primary font-medium underline underline-offset-2
+                       hover:text-brand-primaryHover transition-colors"
           >
             Sign in
           </Link>

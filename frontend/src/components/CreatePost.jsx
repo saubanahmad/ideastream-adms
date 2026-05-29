@@ -46,8 +46,8 @@ const CreatePost = ({ onPostCreated }) => {
           <input
             type="text"
             placeholder="Give your idea a catchy title..."
-            className="w-full bg-brand-cream/5 text-brand-cream placeholder-brand-cream/50
-                       border border-brand-cream/10 rounded-lg px-4 py-2 font-sans focus:outline-none focus:border-brand-light transition-colors"
+            className="w-full bg-brand-surface text-brand-text placeholder:text-brand-muted
+                       border border-brand-border rounded-xl px-4 py-3 font-sans focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             disabled={isLoading}
@@ -59,8 +59,8 @@ const CreatePost = ({ onPostCreated }) => {
         <div className="mb-4">
           <textarea
             placeholder="Share the details of your idea..."
-            className="w-full bg-brand-cream/5 text-brand-cream placeholder-brand-cream/50
-                       border border-brand-cream/10 rounded-lg px-4 py-3 font-sans h-24 resize-none focus:outline-none focus:border-brand-light transition-colors"
+            className="w-full bg-brand-surface text-brand-text placeholder:text-brand-muted
+                       border border-brand-border rounded-xl px-4 py-3 font-sans h-28 resize-none focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             disabled={isLoading}
@@ -70,15 +70,15 @@ const CreatePost = ({ onPostCreated }) => {
         </div>
 
         {error && (
-          <p className="text-red-400 text-sm mb-4 font-sans">{error}</p>
+          <p className="text-red-500 text-sm mb-4 font-sans">{error}</p>
         )}
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-brand-cream/70 text-sm font-sans">Community:</span>
+            <span className="text-brand-muted text-sm font-sans">Community:</span>
             <select
-              className="bg-brand-dark border border-brand-cream/20 text-brand-cream 
-                         text-sm rounded-lg px-2 py-1 font-sans focus:outline-none focus:border-brand-light"
+              className="bg-brand-surface border border-brand-border text-brand-text 
+                         text-sm rounded-lg px-3 py-1.5 font-sans focus:outline-none focus:border-brand-primary cursor-pointer transition-colors"
               value={feed}
               onChange={(e) => setFeed(e.target.value)}
               disabled={isLoading}
