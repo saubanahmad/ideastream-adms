@@ -58,6 +58,15 @@ const getFollowing = async (req, res, next) => {
   }
 };
 
+const getPendingFollowBacks = async (req, res, next) => {
+  try {
+    const pending = await followService.getPendingFollowBacks(req.user.userId);
+    res.json({ status: "success", data: pending });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const searchUsers = async (req, res, next) => {
   try {
     const { q } = req.query;
@@ -73,4 +82,4 @@ const searchUsers = async (req, res, next) => {
   }
 };
 
-module.exports = { followUser, unfollowUser, getSocialCounts, getSuggestions, getFollowers, getFollowing, searchUsers };
+module.exports = { followUser, unfollowUser, getSocialCounts, getSuggestions, getFollowers, getFollowing, searchUsers, getPendingFollowBacks };

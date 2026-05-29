@@ -186,6 +186,37 @@ const getMutualFollows = async (userA, userB) => {
   throw new Error("Not implemented yet");
 };
 
+const getPendingFollowBacks = async (userId) => {
+  const userIdStr = String(userId);
+  const driver = getDriver();
+  if (!driver) return [];
+
+  const session = driver.session();
+  try {
+    const result = await session.run(
+      `MATCH (follower:User)-[:FOLLOWS]->(me:User {userId: $userId})
+       WHERE NOT (me)-[:FOLLOWS]->(follower)
+       RETURN follower.userId AS followerId
+       LIMIT 10`,
+      { userId: userIdStr }
+    );
+
+    const pendingIds = result.records.map(record => parseInt(record.get('followerId'), 10));
+
+    if (pendingIds.length === 0) return [];
+
+    // Fetch users from postgres
+    const users = await prisma.user.findMany({
+      where: { id: { in: pendingIds } },
+      select: { id: true, username: true, email: true, fullName: true }
+    });
+
+    return users;
+  } finally {
+    await session.close();
+  }
+};
+
 const searchUsers = async (keyword, currentUserIdStr) => {
   const currentUserId = parseInt(currentUserIdStr, 10);
   
@@ -235,4 +266,4 @@ const searchUsers = async (keyword, currentUserIdStr) => {
   }
 };
 
-module.exports = { followUser, unfollowUser, getFollowers, getFollowing, getSocialCounts, getSuggestions, getMutualFollows, searchUsers };
+module.exports = { followUser, unfollowUser, getFollowers, getFollowing, getSocialCounts, getSuggestions, getMutualFollows, getPendingFollowBacks, searchUsers };

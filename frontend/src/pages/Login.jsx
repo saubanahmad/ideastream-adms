@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
+import ideaStreamLogo from '../assets/icons/ideastream.svg';
 
 const Login = () => {
   const { login } = useAuth();
@@ -58,9 +59,11 @@ const Login = () => {
 
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <h1 className="font-display text-brand-text text-4xl font-semibold mb-1">
-            💡 IdeaStream
-          </h1>
+          <img
+            src={ideaStreamLogo}
+            alt="IdeaStream"
+            className="mx-auto h-auto w-56 sm:w-64 mb-4"
+          />
           <p className="text-brand-muted text-sm font-sans">
             Welcome back — sign in to continue
           </p>
