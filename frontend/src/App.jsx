@@ -28,6 +28,8 @@ import Feed from './pages/Feed';
 import Trending from './pages/Trending';
 import Profile from './pages/Profile';
 import Following from './pages/Following';
+import UserProfile from './pages/UserProfile';
+import PostDetail from './pages/PostDetail';
 
 const App = () => {
   const { isLoggedIn } = useAuth();
@@ -64,6 +66,14 @@ const App = () => {
       <Route
         path="/following"
         element={<ProtectedRoute><Following /></ProtectedRoute>}
+      />
+      <Route
+        path="/user/:username"
+        element={<ProtectedRoute><UserProfile /></ProtectedRoute>}
+      />
+      <Route
+        path="/post/:id"
+        element={<ProtectedRoute><PostDetail /></ProtectedRoute>}
       />
 
       {/* 404 catch-all */}
