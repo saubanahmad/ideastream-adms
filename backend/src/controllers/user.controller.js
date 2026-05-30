@@ -1,4 +1,5 @@
 const followService = require("../services/follow.service");
+const prisma = require("../config/postgres");
 
 const followUser = async (req, res, next) => {
   try {
@@ -82,4 +83,22 @@ const searchUsers = async (req, res, next) => {
   }
 };
 
-module.exports = { followUser, unfollowUser, getSocialCounts, getSuggestions, getFollowers, getFollowing, searchUsers, getPendingFollowBacks };
+const getUserProfile = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+    const user = await prisma.user.findUnique({
+      where: { username },
+      select: { id: true, username: true, email: true, fullName: true, bio: true, createdAt: true },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ status: "success", data: user });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { followUser, unfollowUser, getSocialCounts, getSuggestions, getFollowers, getFollowing, searchUsers, getPendingFollowBacks, getUserProfile };

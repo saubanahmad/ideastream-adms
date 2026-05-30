@@ -107,11 +107,12 @@ const Following = () => {
     <div className="min-h-screen bg-brand-background">
       <FeedSidebar />
       <Navbar />
-      <main className="ml-20 pt-14 px-6 py-6 max-w-4xl mx-auto">
-        <div className="card mb-6">
-          <h1 className="font-display text-brand-text text-2xl font-semibold">
-            👥 Social Graph
-          </h1>
+      <main className="ml-20 pt-14 flex min-h-screen justify-center">
+        <section className="flex-1 max-w-4xl px-6 py-6">
+          <div className="card mb-6">
+            <h1 className="font-display text-brand-text text-2xl font-semibold">
+              Social Graph
+            </h1>
           <p className="text-brand-muted text-sm mt-1">
             Manage your network and connections.
           </p>
@@ -134,6 +135,7 @@ const Following = () => {
             {renderUserList(followers)}
           </div>
         </div>
+        </section>
       </main>
     </div>
   );

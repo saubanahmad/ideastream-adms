@@ -29,6 +29,7 @@ const getPosts = async (query = {}) => {
   const filter = {};
   if (query.feed) filter.feed = query.feed;
   if (query.authorUsername) filter.authorUsername = query.authorUsername;
+  if (query.authorId) filter.authorId = query.authorId;
 
   let sortOption = { createdAt: -1 }; // default is latest
   if (query.sort === 'trending') {
@@ -98,4 +99,23 @@ const searchPosts = async (keyword) => {
   return await Post.find(filter).sort({ createdAt: -1 }).limit(10);
 };
 
-module.exports = { createPost, getPosts, getPostById, updatePost, deletePost, searchPosts };
+const updateAuthorUsername = async (authorId, newUsername) => {
+  checkMongoConfig();
+  
+  // Update posts where the user is the main author
+  await Post.updateMany(
+    { authorId },
+    { $set: { authorUsername: newUsername } }
+  );
+
+  // Update embedded comments where the user commented
+  await Post.updateMany(
+    { "comments.authorId": authorId },
+    { $set: { "comments.$[elem].authorUsername": newUsername } },
+    { arrayFilters: [{ "elem.authorId": authorId }] }
+  );
+  
+  return true;
+};
+
+module.exports = { createPost, getPosts, getPostById, updatePost, deletePost, searchPosts, updateAuthorUsername };
