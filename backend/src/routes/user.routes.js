@@ -3,6 +3,9 @@ const router = express.Router();
 const userController = require("../controllers/user.controller");
 const { protect } = require("../middleware/auth.middleware");
 
+// GET /api/users/profile/:username
+router.get("/profile/:username", userController.getUserProfile);
+
 // GET /api/users/search?q=keyword
 router.get("/search", protect, userController.searchUsers);
 
