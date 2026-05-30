@@ -8,16 +8,34 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
 import ideaStreamLogo from '../assets/icons/ideastream.svg';
+import cultivateLogo from '../assets/icons/cultivate.svg';
+import digitalfrontierLogo from '../assets/icons/digitalfrontier.svg';
+import fastlaneLogo from '../assets/icons/fastlane.svg';
+import launchpadLogo from '../assets/icons/launchpad.svg';
+import lifescienceLogo from '../assets/icons/lifescience.svg';
+import playlabLogo from '../assets/icons/playlab.svg';
+import tangibletechLogo from '../assets/icons/tangibletech.svg';
+import urbancoreLogo from '../assets/icons/urbancore.svg';
 import followingIcon from '../assets/icons/following.svg';
 import logoutIcon from '../assets/icons/logout.svg';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isCultivate = location.pathname.startsWith('/feed/cultivate');
+  const isDigitalFrontier = location.pathname.startsWith('/feed/digitalfrontier');
+  const isFastLane = location.pathname.startsWith('/feed/fastlane');
+  const isLaunchpad = location.pathname.startsWith('/feed/launchpad');
+  const isLifeScience = location.pathname.startsWith('/feed/lifescience');
+  const isPlayLab = location.pathname.startsWith('/feed/playlab');
+  const isTangibleTech = location.pathname.startsWith('/feed/tangibletech');
+  const isUrbanCore = location.pathname.startsWith('/feed/urbancore');
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState({ users: [], posts: [] });
@@ -90,7 +108,11 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {/* Logo text */}
         <Link to="/home" className="flex items-center">
-          <img src={ideaStreamLogo} alt="IdeaStream" className="h-8 w-auto" />
+          <img 
+            src={isCultivate ? cultivateLogo : (isDigitalFrontier ? digitalfrontierLogo : (isFastLane ? fastlaneLogo : (isLaunchpad ? launchpadLogo : (isLifeScience ? lifescienceLogo : (isPlayLab ? playlabLogo : (isTangibleTech ? tangibletechLogo : (isUrbanCore ? urbancoreLogo : ideaStreamLogo)))))))} 
+            alt="IdeaStream" 
+            className="h-8 w-auto" 
+          />
         </Link>
 
         {/* Search bar */}
@@ -104,9 +126,10 @@ const Navbar = () => {
             }}
             onFocus={() => setShowDropdown(true)}
             placeholder="Search users or ideas"
-            className="w-64 px-4 py-1.5 rounded-full bg-brand-background text-brand-text
-                       placeholder:text-brand-muted text-sm border border-brand-border
+            className="w-64 px-4 py-1.5 rounded-full bg-[var(--color-nav-input-bg)] text-[color:var(--color-nav-input-text)]
+                       placeholder:text-[color:var(--color-nav-input-placeholder)] text-sm border border-brand-border
                        focus:outline-none focus:ring-2 focus:ring-brand-primary
+                       selection:bg-black/20 selection:text-[color:var(--color-nav-input-text)]
                        transition-all duration-200"
           />
 
@@ -126,7 +149,7 @@ const Navbar = () => {
                   {/* Users Section */}
                   {searchResults.users?.length > 0 && (
                     <div className="mb-2">
-                      <div className="px-3 py-2 text-xs font-semibold text-brand-muted uppercase tracking-wider bg-brand-surface border-b border-brand-border">
+                      <div className="px-3 py-2 text-xs font-semibold text-brand-surfaceText uppercase tracking-wider bg-brand-surface border-b border-brand-border">
                         Users
                       </div>
                       {searchResults.users.map(u => (
@@ -136,7 +159,7 @@ const Navbar = () => {
                             setShowDropdown(false);
                             navigate(`/user/${u.username}`);
                           }}
-                          className="flex items-center justify-between p-3 hover:bg-brand-surface transition-colors border-b border-brand-border last:border-0 cursor-pointer"
+                          className="flex items-center justify-between p-3 hover:bg-brand-border transition-colors border-b border-brand-border last:border-0 cursor-pointer"
                         >
                           <div className="min-w-0 pr-3">
                             <p className="text-brand-text font-display text-sm truncate font-semibold">{u.username}</p>
@@ -165,7 +188,7 @@ const Navbar = () => {
                   {/* Posts Section */}
                   {searchResults.posts?.length > 0 && (
                     <div>
-                      <div className="px-3 py-2 text-xs font-semibold text-brand-muted uppercase tracking-wider bg-brand-surface border-b border-brand-border border-t">
+                      <div className="px-3 py-2 text-xs font-semibold text-brand-surfaceText uppercase tracking-wider bg-brand-surface border-b border-brand-border border-t">
                         Posts
                       </div>
                       {searchResults.posts.map(post => (
@@ -175,7 +198,7 @@ const Navbar = () => {
                             setShowDropdown(false);
                             navigate(`/post/${post._id}`);
                           }}
-                          className="flex flex-col p-3 hover:bg-brand-surface transition-colors border-b border-brand-border last:border-0 cursor-pointer"
+                          className="flex flex-col p-3 hover:bg-brand-border transition-colors border-b border-brand-border last:border-0 cursor-pointer"
                         >
                           <div className="flex justify-between items-start mb-1">
                             <p className="text-brand-text font-display text-sm font-semibold line-clamp-1">{post.title}</p>
@@ -201,7 +224,7 @@ const Navbar = () => {
         {user && (
           <Link
             to="/profile"
-            className="font-display text-brand-text text-base hover:text-brand-primary
+            className="font-display text-brand-surfaceText text-base hover:text-brand-surfaceText/80
                        transition-colors duration-200 hidden sm:block"
           >
             {user.username}

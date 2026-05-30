@@ -77,7 +77,7 @@ const VoteButtons = ({ post }) => {
         />
       </button>
       
-      <span className={`text-xs font-semibold min-w-[1ch] text-center ${userVote === 'upvote' ? 'text-green-500' : userVote === 'downvote' ? 'text-red-500' : 'text-brand-text'}`}>
+      <span className={`text-xs font-semibold min-w-[1ch] text-center ${userVote === 'upvote' ? 'text-green-500' : userVote === 'downvote' ? 'text-red-500' : 'text-brand-surfaceText'}`}>
         {score}
       </span>
       
@@ -90,7 +90,7 @@ const VoteButtons = ({ post }) => {
         <img 
           src={userVote === 'downvote' ? downRedIcon : downIcon} 
           alt="Downvote" 
-          className="w-4 h-4" 
+          className="w-4 h-4"
         />
       </button>
     </div>

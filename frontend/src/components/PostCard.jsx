@@ -11,7 +11,7 @@ const PostCard = ({ post }) => {
     <div className="card mb-4">
       <div className="flex items-center justify-between mb-2">
         <span className="font-display text-lg font-semibold">{post?.title || 'Post Title'}</span>
-        <span className="text-xs bg-brand-surface border border-brand-border text-brand-primary px-3 py-1 rounded-full font-medium">
+        <span className="text-xs bg-brand-primary border border-brand-border text-brand-surfaceText px-3 py-1 rounded-full font-medium">
           {post?.feed || 'IdeaStream'}
         </span>
       </div>
@@ -29,10 +29,10 @@ const PostCard = ({ post }) => {
         
         <button 
           onClick={() => setShowComments(!showComments)}
-          className="flex items-center gap-1 hover:text-brand-primary transition-colors cursor-pointer"
+          className="flex items-center gap-1 hover:text-brand-primary transition-colors cursor-pointer text-brand-text"
         >
           <img src={commentIcon} alt="Comments" className="w-4 h-4" />
-          <span>{post?.comments?.length ?? 0}</span>
+          <span className="font-medium">{post?.comments?.length ?? 0}</span>
         </button>
       </div>
 
