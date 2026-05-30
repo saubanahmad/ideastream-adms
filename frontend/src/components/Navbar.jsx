@@ -20,7 +20,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({ users: [], posts: [] });
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loadingActionId, setLoadingActionId] = useState(null);
@@ -38,7 +38,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!searchQuery.trim()) {
-      setSearchResults([]);
+      setSearchResults({ users: [], posts: [] });
       setIsSearching(false);
       return;
     }
@@ -46,12 +46,12 @@ const Navbar = () => {
     const timer = setTimeout(async () => {
       try {
         setIsSearching(true);
-        const { data } = await api.get(`/users/search?q=${encodeURIComponent(searchQuery)}`);
+        const { data } = await api.get(`/search?q=${encodeURIComponent(searchQuery)}`);
         console.log("SEARCH RESPONSE:", data);
-        setSearchResults(data.data || []);
+        setSearchResults(data.data || { users: [], posts: [] });
       } catch (err) {
         console.error("Search failed", err);
-        setSearchResults([]);
+        setSearchResults({ users: [], posts: [] });
       } finally {
         setIsSearching(false);
       }
@@ -67,7 +67,10 @@ const Navbar = () => {
       setLoadingActionId(targetId);
       await api.post(`/users/${targetId}/follow`);
       // Update local state to show followed
-      setSearchResults(prev => prev.map(u => u.id === targetId ? { ...u, isFollowing: true } : u));
+      setSearchResults(prev => ({
+        ...prev,
+        users: prev.users.map(u => u.id === targetId ? { ...u, isFollowing: true } : u)
+      }));
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to follow user.');
     } finally {
@@ -100,7 +103,7 @@ const Navbar = () => {
               setShowDropdown(true);
             }}
             onFocus={() => setShowDropdown(true)}
-            placeholder="Search users..."
+            placeholder="Search users or ideas"
             className="w-64 px-4 py-1.5 rounded-full bg-brand-background text-brand-text
                        placeholder:text-brand-muted text-sm border border-brand-border
                        focus:outline-none focus:ring-2 focus:ring-brand-primary
@@ -109,37 +112,83 @@ const Navbar = () => {
 
           {/* Search Dropdown */}
           {showDropdown && searchQuery.trim().length > 0 && (
-            <div className="absolute top-full left-0 mt-2 w-72 bg-brand-card rounded-xl shadow-lg border border-brand-border overflow-hidden z-50">
+            <div className="absolute top-full left-0 mt-2 w-80 bg-brand-card rounded-xl shadow-lg border border-brand-border overflow-hidden z-50">
               {isSearching ? (
                 <div className="p-4 text-center text-brand-muted text-sm animate-pulse">
                   Searching...
                 </div>
-              ) : searchResults.length === 0 ? (
+              ) : searchResults.users?.length === 0 && searchResults.posts?.length === 0 ? (
                 <div className="p-4 text-center text-brand-muted text-sm">
-                  No users found.
+                  No results found.
                 </div>
               ) : (
-                <div className="max-h-80 overflow-y-auto">
-                  {searchResults.map(u => (
-                    <div key={u.id} className="flex items-center justify-between p-3 hover:bg-brand-surface transition-colors border-b border-brand-border last:border-0">
-                      <div className="min-w-0 pr-3">
-                        <p className="text-brand-text font-display text-sm truncate font-semibold">{u.username}</p>
-                        <p className="text-brand-muted text-xs truncate">{u.email || 'Idea creator'}</p>
+                <div className="max-h-96 overflow-y-auto">
+                  {/* Users Section */}
+                  {searchResults.users?.length > 0 && (
+                    <div className="mb-2">
+                      <div className="px-3 py-2 text-xs font-semibold text-brand-muted uppercase tracking-wider bg-brand-surface border-b border-brand-border">
+                        Users
                       </div>
-                      <button 
-                        onClick={(e) => !u.isFollowing && handleFollow(e, u.id)}
-                        disabled={loadingActionId === u.id || u.isFollowing}
-                        className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 border ${
-                          loadingActionId === u.id
-                            ? 'bg-brand-surface text-brand-muted border-transparent cursor-not-allowed'
-                            : u.isFollowing
-                              ? 'bg-transparent border-brand-border text-brand-muted cursor-not-allowed'
-                              : 'bg-brand-primary border-brand-primary hover:bg-brand-primaryHover text-brand-text'
-                        }`}>
-                        {loadingActionId === u.id ? '...' : u.isFollowing ? 'Following' : 'Follow'}
-                      </button>
+                      {searchResults.users.map(u => (
+                        <div 
+                          key={u.id} 
+                          onClick={() => {
+                            setShowDropdown(false);
+                            navigate(`/user/${u.username}`);
+                          }}
+                          className="flex items-center justify-between p-3 hover:bg-brand-surface transition-colors border-b border-brand-border last:border-0 cursor-pointer"
+                        >
+                          <div className="min-w-0 pr-3">
+                            <p className="text-brand-text font-display text-sm truncate font-semibold">{u.username}</p>
+                            <p className="text-brand-muted text-xs truncate">{u.email || 'Idea creator'}</p>
+                          </div>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!u.isFollowing) handleFollow(e, u.id);
+                            }}
+                            disabled={loadingActionId === u.id || u.isFollowing}
+                            className={`text-xs px-3 py-1 rounded-full transition-colors duration-200 shrink-0 border ${
+                              loadingActionId === u.id
+                                ? 'bg-brand-surface text-brand-muted border-transparent cursor-not-allowed'
+                                : u.isFollowing
+                                  ? 'bg-transparent border-brand-border text-brand-muted cursor-not-allowed'
+                                  : 'bg-brand-primary border-brand-primary hover:bg-brand-primaryHover text-brand-text'
+                            }`}>
+                            {loadingActionId === u.id ? '...' : u.isFollowing ? 'Following' : 'Follow'}
+                          </button>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  )}
+
+                  {/* Posts Section */}
+                  {searchResults.posts?.length > 0 && (
+                    <div>
+                      <div className="px-3 py-2 text-xs font-semibold text-brand-muted uppercase tracking-wider bg-brand-surface border-b border-brand-border border-t">
+                        Posts
+                      </div>
+                      {searchResults.posts.map(post => (
+                        <div 
+                          key={post._id} 
+                          onClick={() => {
+                            setShowDropdown(false);
+                            navigate(`/post/${post._id}`);
+                          }}
+                          className="flex flex-col p-3 hover:bg-brand-surface transition-colors border-b border-brand-border last:border-0 cursor-pointer"
+                        >
+                          <div className="flex justify-between items-start mb-1">
+                            <p className="text-brand-text font-display text-sm font-semibold line-clamp-1">{post.title}</p>
+                            <span className="text-[10px] bg-brand-surface border border-brand-border text-brand-primary px-2 py-0.5 rounded-full shrink-0 ml-2">
+                              {post.feed}
+                            </span>
+                          </div>
+                          <p className="text-brand-muted text-xs line-clamp-2 mb-1">{post.content}</p>
+                          <p className="text-brand-muted text-[10px]">by @{post.authorUsername}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
