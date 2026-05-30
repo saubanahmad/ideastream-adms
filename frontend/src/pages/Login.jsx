@@ -22,7 +22,7 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,8 +35,8 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    if (!formData.email || !formData.password) {
-      setError('Please fill in all fields.');
+    if (!formData.username || !formData.password) {
+      setError('Username and password are required.');
       return;
     }
 
@@ -72,19 +72,19 @@ const Login = () => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
 
-          {/* Email */}
+          {/* Username */}
           <div>
-            <label htmlFor="email" className="input-label">
-              Email
+            <label htmlFor="username" className="input-label">
+              Username
             </label>
             <input
-              id="email"
-              type="email"
-              name="email"
-              value={formData.email}
+              id="username"
+              type="text"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
-              placeholder="you@example.com"
-              autoComplete="email"
+              placeholder="Enter your username"
+              autoComplete="username"
               className="input-field"
             />
           </div>

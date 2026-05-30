@@ -31,15 +31,15 @@ const register = async (req, res, next) => {
 // POST /api/auth/login
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ message: "Username and password are required" });
     }
     
-    const result = await authService.login({ email, password });
+    const result = await authService.login({ username, password });
     res.status(200).json(result);
   } catch (err) {
-    if (err.message === "Invalid email or password") {
+    if (err.message === "Invalid username or password") {
       return res.status(401).json({ message: err.message });
     }
     next(err);
