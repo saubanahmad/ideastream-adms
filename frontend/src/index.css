@@ -20,15 +20,192 @@
    Base layer — global resets and defaults
    ───────────────────────────────────────────── */
 @layer base {
-  :root {
+
+  :root,
+  .theme-ideastream {
     --color-background: #000000;
     --color-surface: #1F150C;
     --color-card: #1F150C;
     --color-border: #412D15;
     --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
     --color-muted: rgba(225, 220, 201, 0.65);
     --color-primary: #412D15;
     --color-primaryHover: #563C1E;
+    --color-input-bg: var(--color-surface);
+    --color-input-border: var(--color-border);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: var(--color-text);
+    --color-nav-input-placeholder: var(--color-muted);
+  }
+
+  .theme-cultivate {
+    --color-background: #f1f0e9;
+    --color-surface: #0d4715;
+    --color-card: #0d4715;
+    /* Blends with background nicely */
+    --color-border: #1B211A;
+    --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
+    --color-muted: rgba(241, 240, 233, 0.65);
+    --color-primary: #1E5A22;
+    --color-primaryHover: #2E7333;
+    --color-input-bg: rgba(0, 0, 0, 0.25);
+    --color-input-border: rgba(241, 240, 233, 0.2);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: #1B211A;
+    --color-nav-input-placeholder: rgba(27, 33, 26, 0.65);
+  }
+
+  .theme-cultivate .icon-dynamic {
+    filter: brightness(0.2);
+  }
+
+  .theme-digitalfrontier {
+    --color-background: #e9dfc3;
+    --color-surface: #0118d8;
+    --color-card: #0118d8;
+    --color-border: #121358;
+    --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
+    --color-muted: rgba(233, 223, 195, 0.65);
+    --color-primary: #0f27ff;
+    --color-primaryHover: #2b3eff;
+    --color-input-bg: rgba(0, 0, 0, 0.25);
+    --color-input-border: rgba(233, 223, 195, 0.2);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: #121358;
+    --color-nav-input-placeholder: rgba(18, 19, 88, 0.65);
+  }
+
+  .theme-digitalfrontier .icon-dynamic {
+    filter: brightness(0.2);
+  }
+
+  .theme-fastlane {
+    --color-background: #1d1616;
+    --color-surface: #8e1616;
+    --color-card: #8e1616;
+    --color-border: #e62626;
+    --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
+    --color-muted: rgba(225, 220, 201, 0.65);
+    --color-primary: #b31b1b;
+    --color-primaryHover: #d92424;
+    --color-input-bg: rgba(0, 0, 0, 0.25);
+    --color-input-border: rgba(225, 220, 201, 0.2);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: #E1DCC9;
+    --color-nav-input-placeholder: rgba(225, 220, 201, 0.65);
+  }
+
+  .theme-fastlane .icon-dynamic {
+    filter: brightness(0.2);
+  }
+
+  .theme-launchpad {
+    --color-background: #fcef91;
+    --color-surface: #e6521f;
+    --color-card: #e6521f;
+    --color-border: #fb9e3a;
+    --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
+    --color-muted: rgba(252, 239, 145, 0.65);
+    --color-primary: #ff6a38;
+    --color-primaryHover: #ff8c61;
+    --color-input-bg: rgba(0, 0, 0, 0.25);
+    --color-input-border: rgba(252, 239, 145, 0.2);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: #e6521f;
+    --color-nav-input-placeholder: rgba(230, 82, 31, 0.65);
+  }
+
+  .theme-launchpad .icon-dynamic {
+    filter: brightness(0.2);
+  }
+
+  .theme-lifescience {
+    --color-background: #2b2a4c;
+    --color-surface: #b31312;
+    --color-card: #b31312;
+    --color-border: #ea906c;
+    --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
+    --color-muted: rgba(225, 220, 201, 0.65);
+    --color-primary: #d91615;
+    --color-primaryHover: #fa1918;
+    --color-input-bg: rgba(0, 0, 0, 0.25);
+    --color-input-border: rgba(234, 144, 108, 0.2);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: var(--color-text);
+    --color-nav-input-placeholder: rgba(225, 220, 201, 0.65);
+  }
+
+  .theme-lifescience .icon-dynamic {
+    filter: brightness(0.2);
+  }
+
+  .theme-playlab {
+    --color-background: #211832;
+    --color-surface: #450492;
+    --color-card: #450492;
+    --color-border: #9b7ebd;
+    --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
+    --color-muted: rgba(225, 220, 201, 0.65);
+    --color-primary: #5910b3;
+    --color-primaryHover: #711ed6;
+    --color-input-bg: rgba(0, 0, 0, 0.25);
+    --color-input-border: rgba(155, 126, 189, 0.2);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: var(--color-text);
+    --color-nav-input-placeholder: rgba(225, 220, 201, 0.65);
+  }
+
+  .theme-playlab .icon-dynamic {
+    filter: brightness(0.2);
+  }
+
+  .theme-tangibletech {
+    --color-background: #f5e4c3;
+    --color-surface: #34a7b2;
+    --color-card: #34a7b2;
+    --color-border: #5b2e35;
+    --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
+    --color-muted: rgba(225, 220, 201, 0.65);
+    --color-primary: #227078;
+    --color-primaryHover: #185258;
+    --color-input-bg: rgba(0, 0, 0, 0.25);
+    --color-input-border: rgba(91, 46, 53, 0.3);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: #5b2e35;
+    --color-nav-input-placeholder: rgba(91, 46, 53, 0.65);
+  }
+
+  .theme-tangibletech .icon-dynamic {
+    filter: brightness(0.2);
+  }
+
+  .theme-urbancore {
+    --color-background: #393e46;
+    --color-surface: #0d7377;
+    --color-card: #0d7377;
+    --color-border: #32e0c4;
+    --color-text: #E1DCC9;
+    --color-surface-text: #E1DCC9;
+    --color-muted: rgba(225, 220, 201, 0.65);
+    --color-primary: #14a3a8;
+    --color-primaryHover: #1bd0d6;
+    --color-input-bg: rgba(0, 0, 0, 0.25);
+    --color-input-border: rgba(50, 224, 196, 0.3);
+    --color-nav-input-bg: var(--color-background);
+    --color-nav-input-text: var(--color-text);
+    --color-nav-input-placeholder: rgba(225, 220, 201, 0.65);
+  }
+
+  .theme-urbancore .icon-dynamic {
+    filter: brightness(0.2);
   }
 
   * {
@@ -94,7 +271,9 @@
 
   /* Form input — clean white inputs with subtle borders */
   .input-field {
-    @apply w-full px-4 py-3 rounded-xl border border-brand-border bg-brand-surface text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all duration-200 font-sans;
+    @apply w-full px-4 py-3 rounded-xl border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all duration-200 font-sans;
+    background-color: var(--color-input-bg);
+    border-color: var(--color-input-border);
   }
 
   /* Form label */

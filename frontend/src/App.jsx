@@ -19,6 +19,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
+import useTheme from './hooks/useTheme';
 
 // Pages
 import Login from './pages/Login';
@@ -33,6 +34,7 @@ import PostDetail from './pages/PostDetail';
 
 const App = () => {
   const { isLoggedIn } = useAuth();
+  useTheme(); // Apply global theme dynamically based on current route
 
   return (
     <Routes>
