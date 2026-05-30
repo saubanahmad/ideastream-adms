@@ -18,6 +18,7 @@ const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken');
 const { getDriver } = require('../config/neo4j');
 const { logActivity, ACTION_TYPES } = require('./activity.service');
+const postService = require('./post.service');
 
 const register = async ({ username, email, fullName, password }) => {
   // 1. Check if username or email already exists in PostgreSQL
@@ -131,4 +132,66 @@ const getMe = async (userId) => {
   return user;
 };
 
-module.exports = { register, login, getMe };
+const updateMe = async (userId, { username, fullName, bio }) => {
+  const parsedId = parseInt(userId, 10);
+  
+  // Get current user
+  const currentUser = await prisma.user.findUnique({ where: { id: parsedId } });
+  if (!currentUser) throw new Error("User not found");
+
+  // Check if username is being changed and if it's already taken
+  if (username && username !== currentUser.username) {
+    const existingUser = await prisma.user.findUnique({ where: { username } });
+    if (existingUser) {
+      throw new Error("Username already exists");
+    }
+  }
+
+  // Update in PostgreSQL
+  const updatedUser = await prisma.user.update({
+    where: { id: parsedId },
+    data: {
+      username: username || currentUser.username,
+      fullName: fullName || currentUser.fullName,
+      bio: bio !== undefined ? bio : currentUser.bio,
+    },
+    select: { id: true, username: true, email: true, fullName: true, bio: true, createdAt: true },
+  });
+
+  // If username changed, update Neo4j and MongoDB
+  if (username && username !== currentUser.username) {
+    // Neo4j update
+    try {
+      const driver = getDriver();
+      if (driver) {
+        const session = driver.session();
+        await session.run(
+          `MATCH (u:User {userId: $userId}) SET u.username = $username`,
+          { userId: String(parsedId), username: updatedUser.username }
+        );
+        await session.close();
+      }
+    } catch (err) {
+      console.error("Failed to update username in Neo4j:", err);
+    }
+
+    // MongoDB update (posts)
+    try {
+      if (postService.updateAuthorUsername) {
+        await postService.updateAuthorUsername(String(parsedId), updatedUser.username);
+      }
+    } catch (err) {
+      console.error("Failed to update username in MongoDB:", err);
+    }
+  }
+
+  // Generate new token
+  const token = generateToken({ userId: updatedUser.id, username: updatedUser.username });
+
+  return {
+    user: updatedUser,
+    token,
+  };
+};
+
+module.exports = { register, login, getMe, updateMe };

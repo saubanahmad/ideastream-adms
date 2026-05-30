@@ -27,6 +27,7 @@ const voteRoutes = require("./routes/vote.routes");
 const feedRoutes = require("./routes/feed.routes");
 const followRoutes = require("./routes/follow.routes");
 const userRoutes = require("./routes/user.routes");
+const searchRoutes = require("./routes/search.routes");
 
 // --- Middleware imports ---
 const errorMiddleware = require("./middleware/error.middleware");
@@ -92,6 +93,7 @@ app.use("/api/posts", voteRoutes);     // /api/posts/:id/vote
 app.use("/api/feed", feedRoutes);
 app.use("/api/follow", followRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/search", searchRoutes);
 
 // ─────────────────────────────────────────────
 // 404 Handler

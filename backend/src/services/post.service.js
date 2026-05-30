@@ -25,10 +25,18 @@ const createPost = async ({ authorId, authorUsername, title, content, feed }) =>
 
 const getPosts = async (query = {}) => {
   checkMongoConfig();
-  // Filter by feed if provided, otherwise return all
-  const filter = query.feed ? { feed: query.feed } : {};
-  // Sort by createdAt descending (newest first)
-  const posts = await Post.find(filter).sort({ createdAt: -1 });
+  
+  const filter = {};
+  if (query.feed) filter.feed = query.feed;
+  if (query.authorUsername) filter.authorUsername = query.authorUsername;
+  if (query.authorId) filter.authorId = query.authorId;
+
+  let sortOption = { createdAt: -1 }; // default is latest
+  if (query.sort === 'trending') {
+    sortOption = { score: -1, createdAt: -1 };
+  }
+
+  const posts = await Post.find(filter).sort(sortOption);
   return posts;
 };
 
@@ -74,4 +82,40 @@ const deletePost = async (postId, userId) => {
   return true;
 };
 
-module.exports = { createPost, getPosts, getPostById, updatePost, deletePost };
+const searchPosts = async (keyword) => {
+  checkMongoConfig();
+  if (!keyword || !keyword.trim()) return [];
+  
+  const regex = new RegExp(keyword, 'i');
+  const filter = {
+    $or: [
+      { title: regex },
+      { content: regex },
+      { authorUsername: regex },
+      { feed: regex }
+    ]
+  };
+
+  return await Post.find(filter).sort({ createdAt: -1 }).limit(10);
+};
+
+const updateAuthorUsername = async (authorId, newUsername) => {
+  checkMongoConfig();
+  
+  // Update posts where the user is the main author
+  await Post.updateMany(
+    { authorId },
+    { $set: { authorUsername: newUsername } }
+  );
+
+  // Update embedded comments where the user commented
+  await Post.updateMany(
+    { "comments.authorId": authorId },
+    { $set: { "comments.$[elem].authorUsername": newUsername } },
+    { arrayFilters: [{ "elem.authorId": authorId }] }
+  );
+  
+  return true;
+};
+
+module.exports = { createPost, getPosts, getPostById, updatePost, deletePost, searchPosts, updateAuthorUsername };

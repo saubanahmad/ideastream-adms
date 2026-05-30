@@ -60,4 +60,17 @@ const getMe = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, getMe };
+const updateMe = async (req, res, next) => {
+  try {
+    const { username, fullName, bio } = req.body;
+    const result = await authService.updateMe(req.user.userId, { username, fullName, bio });
+    res.status(200).json(result);
+  } catch (err) {
+    if (err.message === "Username already exists") {
+      return res.status(400).json({ message: err.message });
+    }
+    next(err);
+  }
+};
+
+module.exports = { register, login, getMe, updateMe };

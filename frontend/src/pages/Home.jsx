@@ -9,6 +9,7 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sort, setSort] = useState('latest');
 
   // Suggestions state
   const [suggestions, setSuggestions] = useState([]);
@@ -25,7 +26,7 @@ const Home = () => {
     const fetchPosts = async () => {
       try {
         setIsLoading(true);
-        const { data } = await api.get('/posts');
+        const { data } = await api.get(`/posts?sort=${sort}`);
         setPosts(data.data);
         setError(null);
       } catch (err) {
@@ -65,7 +66,7 @@ const Home = () => {
     fetchPosts();
     fetchSuggestions();
     fetchPendingFollowBacks();
-  }, []);
+  }, [sort]);
 
   const handleNewPost = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
@@ -108,10 +109,16 @@ const Home = () => {
 
           {/* Feed Toggle (Latest / Trending) */}
           <div className="flex gap-3 mb-5">
-            <button className="btn-primary text-sm px-5 py-2">
+            <button 
+              onClick={() => setSort('latest')}
+              className={`text-sm px-5 py-2 rounded-full transition-all ${sort === 'latest' ? 'bg-brand-primary text-brand-text font-semibold' : 'bg-brand-surface border border-brand-border text-brand-muted hover:text-brand-text'}`}
+            >
               Latest
             </button>
-            <button className="btn-secondary text-sm px-5 py-2">
+            <button 
+              onClick={() => setSort('trending')}
+              className={`text-sm px-5 py-2 rounded-full transition-all ${sort === 'trending' ? 'bg-brand-primary text-brand-text font-semibold' : 'bg-brand-surface border border-brand-border text-brand-muted hover:text-brand-text'}`}
+            >
               Trending
             </button>
           </div>

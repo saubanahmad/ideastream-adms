@@ -26,4 +26,7 @@ router.post("/login", authController.login);
 // GET /api/auth/me (protected — requires JWT)
 router.get("/me", protect, authController.getMe);
 
+// PATCH /api/auth/me (protected — requires JWT)
+router.patch("/me", protect, authController.updateMe);
+
 module.exports = router;
