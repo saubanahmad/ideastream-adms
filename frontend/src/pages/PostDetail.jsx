@@ -59,7 +59,7 @@ const PostDetail = () => {
               </button>
             </div>
           ) : post ? (
-            <PostCard post={post} />
+            <PostCard post={post} onDelete={() => navigate(-1)} />
           ) : null}
         </section>
       </main>
