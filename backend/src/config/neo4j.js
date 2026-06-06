@@ -46,9 +46,29 @@ const connectNeo4j = async () => {
     // verifyConnectivity() opens a test connection to confirm Neo4j is reachable
     await driver.verifyConnectivity();
     console.log("✅ Neo4j connected");
+
+    // Initialize constraints
+    await initConstraints();
   } catch (err) {
     console.error("❌ Neo4j connection failed:", err.message);
     // Don't crash the server — log and continue
+  }
+};
+
+const initConstraints = async () => {
+  if (!driver) return;
+  const session = driver.session();
+  try {
+    await session.run(`
+      CREATE CONSTRAINT unique_user_id IF NOT EXISTS 
+      FOR (u:User) 
+      REQUIRE u.userId IS UNIQUE;
+    `);
+    console.log("✅ Neo4j constraints initialized");
+  } catch (err) {
+    console.error("❌ Failed to initialize Neo4j constraints:", err.message);
+  } finally {
+    await session.close();
   }
 };
 
