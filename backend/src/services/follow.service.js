@@ -25,6 +25,7 @@
  * Implementation: Phase 4
  */
 
+const neo4j = require('neo4j-driver');
 const { getDriver } = require('../config/neo4j');
 const prisma = require('../config/postgres');
 
@@ -51,6 +52,7 @@ const followUser = async (followerId, targetIdStr) => {
   try {
     await session.run(
       `MATCH (a:User {userId: $followerId}), (b:User {userId: $targetId})
+       WHERE a.userId <> b.userId
        MERGE (a)-[:FOLLOWS]->(b)`,
       { followerId: String(followerId), targetId: String(targetId) }
     );
@@ -77,7 +79,7 @@ const unfollowUser = async (followerId, targetIdStr) => {
   }
 };
 
-const getFollowers = async (userIdStr) => {
+const getFollowers = async (userIdStr, offset = 0, limit = 20) => {
   const userId = String(userIdStr);
   const driver = getDriver();
   if (!driver) return [];
@@ -86,17 +88,14 @@ const getFollowers = async (userIdStr) => {
   try {
     const result = await session.run(
       `MATCH (follower:User)-[:FOLLOWS]->(u:User {userId: $userId})
-       RETURN follower.userId AS followerId`,
-      { userId }
+       RETURN follower.userId AS followerId
+       ORDER BY follower.username
+       SKIP $offset LIMIT $limit`,
+      { userId, offset: neo4j.int(offset), limit: neo4j.int(limit) }
     );
     const followerIds = result.records.map(record => parseInt(record.get('followerId'), 10));
     if (followerIds.length === 0) return [];
 
-    // TODO (ADMS Evaluation): 
-    // This query fetches all followers at once, which causes a huge IN (...) query 
-    // when a user has thousands of followers. For scalability:
-    // 1. Neo4j should return paginated IDs first (using SKIP and LIMIT).
-    // 2. PostgreSQL should hydrate only the current page of IDs.
     const users = await prisma.user.findMany({
       where: { id: { in: followerIds } },
       select: { id: true, username: true, email: true, fullName: true }
@@ -107,7 +106,7 @@ const getFollowers = async (userIdStr) => {
   }
 };
 
-const getFollowing = async (userIdStr) => {
+const getFollowing = async (userIdStr, offset = 0, limit = 20) => {
   const userId = String(userIdStr);
   const driver = getDriver();
   if (!driver) return [];
@@ -116,8 +115,10 @@ const getFollowing = async (userIdStr) => {
   try {
     const result = await session.run(
       `MATCH (u:User {userId: $userId})-[:FOLLOWS]->(following:User)
-       RETURN following.userId AS followingId`,
-      { userId }
+       RETURN following.userId AS followingId
+       ORDER BY following.username
+       SKIP $offset LIMIT $limit`,
+      { userId, offset: neo4j.int(offset), limit: neo4j.int(limit) }
     );
     const followingIds = result.records.map(record => parseInt(record.get('followingId'), 10));
     if (followingIds.length === 0) return [];
@@ -141,9 +142,17 @@ const getSocialCounts = async (userIdStr) => {
   try {
     const result = await session.run(
       `MATCH (u:User {userId: $userId})
-       OPTIONAL MATCH (u)-[r1:FOLLOWS]->()
-       OPTIONAL MATCH ()-[r2:FOLLOWS]->(u)
-       RETURN count(DISTINCT r1) AS following, count(DISTINCT r2) AS followers`,
+       CALL {
+         WITH u
+         MATCH (u)-[:FOLLOWS]->()
+         RETURN count(*) AS following
+       }
+       CALL {
+         WITH u
+         MATCH ()-[:FOLLOWS]->(u)
+         RETURN count(*) AS followers
+       }
+       RETURN following, followers`,
       { userId }
     );
     if (result.records.length === 0) return { followers: 0, following: 0 };

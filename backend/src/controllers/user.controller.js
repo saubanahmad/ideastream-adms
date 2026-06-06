@@ -43,7 +43,9 @@ const getSuggestions = async (req, res, next) => {
 
 const getFollowers = async (req, res, next) => {
   try {
-    const followers = await followService.getFollowers(req.params.id);
+    const offset = parseInt(req.query.offset) || 0;
+    const limit = parseInt(req.query.limit) || 20;
+    const followers = await followService.getFollowers(req.params.id, offset, limit);
     res.json({ status: "success", data: followers });
   } catch (err) {
     next(err);
@@ -52,7 +54,9 @@ const getFollowers = async (req, res, next) => {
 
 const getFollowing = async (req, res, next) => {
   try {
-    const following = await followService.getFollowing(req.params.id);
+    const offset = parseInt(req.query.offset) || 0;
+    const limit = parseInt(req.query.limit) || 20;
+    const following = await followService.getFollowing(req.params.id, offset, limit);
     res.json({ status: "success", data: following });
   } catch (err) {
     next(err);
