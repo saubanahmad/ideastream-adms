@@ -85,20 +85,20 @@ const register = async ({ username, email, fullName, password }) => {
   };
 };
 
-const login = async ({ email, password }) => {
-  // 1. Find user by email in PostgreSQL
+const login = async ({ username, password }) => {
+  // 1. Find user by username in PostgreSQL
   const user = await prisma.user.findUnique({
-    where: { email },
+    where: { username },
   });
 
   if (!user) {
-    throw new Error('Invalid email or password');
+    throw new Error('Invalid username or password');
   }
 
   // 2. Compare password with bcrypt.compare()
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) {
-    throw new Error('Invalid email or password');
+    throw new Error('Invalid username or password');
   }
 
   // Log activity (optional)

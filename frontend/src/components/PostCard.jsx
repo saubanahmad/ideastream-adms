@@ -4,6 +4,15 @@ import VoteButtons from './VoteButtons';
 import CommentBox from './CommentBox';
 import commentIcon from '../assets/icons/comment.svg';
 
+const getImageUrl = (url) => {
+  if (!url) return null;
+  if (url.startsWith('http')) return url;
+  const baseUrl = import.meta.env.VITE_API_URL 
+    ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '') 
+    : 'http://localhost:5000';
+  return `${baseUrl}${url.startsWith('/') ? url : `/${url}`}`;
+};
+
 const PostCard = ({ post }) => {
   const [showComments, setShowComments] = useState(false);
 
@@ -15,7 +24,17 @@ const PostCard = ({ post }) => {
           {post?.feed || 'IdeaStream'}
         </span>
       </div>
-      <p className="text-brand-text text-sm leading-relaxed">{post?.content}</p>
+      <p className="text-brand-text text-sm leading-relaxed whitespace-pre-wrap">{post?.content}</p>
+      
+      {post?.imageUrl && (
+        <div className="mt-4">
+          <img 
+            src={getImageUrl(post.imageUrl)} 
+            alt="Post attachment" 
+            className="w-full max-h-[350px] object-cover rounded-xl border border-brand-border"
+          />
+        </div>
+      )}
       
       <div className="mt-4 flex items-center gap-4 text-sm text-brand-muted">
         <Link 
