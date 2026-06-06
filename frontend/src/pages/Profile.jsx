@@ -217,7 +217,7 @@ const Profile = () => {
           ) : (
             <div className="space-y-4">
               {posts.map(post => (
-                <PostCard key={post._id} post={post} />
+                <PostCard key={post._id} post={post} onDelete={(id) => setPosts(prev => prev.filter(p => p._id !== id))} />
               ))}
             </div>
           )}

@@ -280,4 +280,20 @@ const searchUsers = async (keyword, currentUserIdStr) => {
   }
 };
 
-module.exports = { followUser, unfollowUser, getFollowers, getFollowing, getSocialCounts, getSuggestions, getMutualFollows, getPendingFollowBacks, searchUsers };
+const checkIsFollowing = async (followerId, targetIdStr) => {
+  const driver = getDriver();
+  if (!driver) return false;
+  const session = driver.session();
+  try {
+    const result = await session.run(
+      `MATCH (me:User {userId: $followerId})-[:FOLLOWS]->(target:User {userId: $targetId})
+       RETURN target.userId`,
+      { followerId: String(followerId), targetId: String(targetIdStr) }
+    );
+    return result.records.length > 0;
+  } finally {
+    await session.close();
+  }
+};
+
+module.exports = { followUser, unfollowUser, getFollowers, getFollowing, getSocialCounts, getSuggestions, getMutualFollows, getPendingFollowBacks, searchUsers, checkIsFollowing };

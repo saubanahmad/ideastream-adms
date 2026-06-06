@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import FeedSidebar from '../components/FeedSidebar';
 import PostCard from '../components/PostCard';
 import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 const UserProfile = () => {
   const { username } = useParams();
@@ -11,6 +12,10 @@ const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [loadingFollow, setLoadingFollow] = useState(false);
+  
+  const { user } = useAuth();
   
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,6 +41,16 @@ const UserProfile = () => {
         setFollowersCount(countsRes.data.data.followers);
         setFollowingCount(countsRes.data.data.following);
         
+        // fetch follow status if logged in and not viewing own profile
+        if (user && user.username !== username) {
+          try {
+            const followingRes = await api.get(`/users/${userData.id}/is-following`);
+            setIsFollowing(followingRes.data.isFollowing);
+          } catch (err) {
+            console.error('Failed to fetch follow status', err);
+          }
+        }
+        
         setError(null);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load user profile.');
@@ -45,7 +60,27 @@ const UserProfile = () => {
     };
 
     fetchUserData();
-  }, [username]);
+  }, [username, user]);
+
+  const handleFollowToggle = async () => {
+    if (!profile) return;
+    try {
+      setLoadingFollow(true);
+      if (isFollowing) {
+        await api.delete(`/users/${profile.id}/follow`);
+        setIsFollowing(false);
+        setFollowersCount(prev => prev - 1);
+      } else {
+        await api.post(`/users/${profile.id}/follow`);
+        setIsFollowing(true);
+        setFollowersCount(prev => prev + 1);
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to update follow status.');
+    } finally {
+      setLoadingFollow(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-brand-background">
@@ -91,16 +126,34 @@ const UserProfile = () => {
                   </div>
                 </div>
 
-                {/* Right side: Follow Stats */}
-                <div className="flex gap-6 md:border-l border-brand-border md:pl-6 md:pr-4 shrink-0 md:justify-center justify-start items-center">
-                  <div className="text-center">
-                    <span className="block font-display text-2xl font-bold text-brand-text">{followersCount}</span>
-                    <span className="text-xs text-brand-muted uppercase tracking-wider font-semibold">Followers</span>
+                {/* Right side: Follow Stats & Action */}
+                <div className="flex flex-col gap-4 md:border-l border-brand-border md:pl-6 md:pr-4 shrink-0 justify-center items-center">
+                  <div className="flex gap-6">
+                    <div className="text-center">
+                      <span className="block font-display text-2xl font-bold text-brand-text">{followersCount}</span>
+                      <span className="text-xs text-brand-muted uppercase tracking-wider font-semibold">Followers</span>
+                    </div>
+                    <div className="text-center">
+                      <span className="block font-display text-2xl font-bold text-brand-text">{followingCount}</span>
+                      <span className="text-xs text-brand-muted uppercase tracking-wider font-semibold">Following</span>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <span className="block font-display text-2xl font-bold text-brand-text">{followingCount}</span>
-                    <span className="text-xs text-brand-muted uppercase tracking-wider font-semibold">Following</span>
-                  </div>
+
+                  {user && user.username !== profile?.username && (
+                    <button 
+                      onClick={handleFollowToggle}
+                      disabled={loadingFollow}
+                      className={`w-full py-1.5 rounded-full text-sm font-semibold transition-colors border ${
+                        loadingFollow 
+                          ? 'bg-brand-surface text-brand-muted border-transparent cursor-not-allowed'
+                          : isFollowing
+                            ? 'bg-transparent border-brand-border text-brand-text hover:bg-brand-surface'
+                            : 'bg-brand-primary border-brand-primary text-brand-text hover:bg-brand-primaryHover'
+                      }`}
+                    >
+                      {loadingFollow ? '...' : isFollowing ? 'Unfollow' : 'Follow'}
+                    </button>
+                  )}
                 </div>
 
               </div>
@@ -123,7 +176,7 @@ const UserProfile = () => {
               ) : (
                 <div className="space-y-4">
                   {posts.map(post => (
-                    <PostCard key={post._id} post={post} />
+                    <PostCard key={post._id} post={post} onDelete={(id) => setPosts(prev => prev.filter(p => p._id !== id))} />
                   ))}
                 </div>
               )}

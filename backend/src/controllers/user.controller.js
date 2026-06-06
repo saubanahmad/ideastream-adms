@@ -105,4 +105,13 @@ const getUserProfile = async (req, res, next) => {
   }
 };
 
-module.exports = { followUser, unfollowUser, getSocialCounts, getSuggestions, getFollowers, getFollowing, searchUsers, getPendingFollowBacks, getUserProfile };
+const checkIsFollowing = async (req, res, next) => {
+  try {
+    const isFollowing = await followService.checkIsFollowing(req.user.userId, req.params.id);
+    res.json({ status: "success", isFollowing });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { followUser, unfollowUser, getSocialCounts, getSuggestions, getFollowers, getFollowing, searchUsers, getPendingFollowBacks, getUserProfile, checkIsFollowing };

@@ -30,4 +30,7 @@ router.post("/:id/follow", protect, userController.followUser);
 // DELETE /api/users/:id/follow
 router.delete("/:id/follow", protect, userController.unfollowUser);
 
+// GET /api/users/:id/is-following
+router.get("/:id/is-following", protect, userController.checkIsFollowing);
+
 module.exports = router;

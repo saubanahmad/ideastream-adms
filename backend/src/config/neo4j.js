@@ -60,13 +60,18 @@ const initConstraints = async () => {
   const session = driver.session();
   try {
     await session.run(`
-      CREATE CONSTRAINT unique_user_id IF NOT EXISTS 
+      CREATE CONSTRAINT user_userId_unique IF NOT EXISTS 
       FOR (u:User) 
       REQUIRE u.userId IS UNIQUE;
     `);
     console.log("✅ Neo4j constraints initialized");
   } catch (err) {
-    console.error("❌ Failed to initialize Neo4j constraints:", err.message);
+    // If there is a non-critical schema conflict, log a warning but don't fail
+    if (err.message.includes('already exists')) {
+      console.log(`ℹ️ Neo4j constraints already initialized or exist (${err.message})`);
+    } else {
+      console.warn("⚠️ Failed to initialize Neo4j constraints:", err.message);
+    }
   } finally {
     await session.close();
   }
