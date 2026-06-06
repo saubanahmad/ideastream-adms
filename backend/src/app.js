@@ -13,6 +13,7 @@
 
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 // --- Database connections ---
 const connectMongo = require("./config/mongo");
@@ -55,6 +56,9 @@ app.use(
 // ─────────────────────────────────────────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files (e.g. uploaded images)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // ─────────────────────────────────────────────
 // Connect to Databases

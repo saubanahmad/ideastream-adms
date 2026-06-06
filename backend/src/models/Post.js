@@ -101,6 +101,10 @@ const PostSchema = new mongoose.Schema(
       trim: true,
       maxlength: [5000, "Post content cannot exceed 5000 characters"],
     },
+    imageUrl: {
+      type: String,
+      default: null,
+    },
 
     // Which of the 9 feeds this post belongs to
     feed: {

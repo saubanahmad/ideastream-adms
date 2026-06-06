@@ -4,6 +4,15 @@ import VoteButtons from './VoteButtons';
 import CommentBox from './CommentBox';
 import commentIcon from '../assets/icons/comment.svg';
 
+const getImageUrl = (url) => {
+  if (!url) return null;
+  if (url.startsWith('http')) return url;
+  const baseUrl = import.meta.env.VITE_API_URL 
+    ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '') 
+    : 'http://localhost:5000';
+  return `${baseUrl}${url.startsWith('/') ? url : `/${url}`}`;
+};
+
 const PostCard = ({ post }) => {
   const [showComments, setShowComments] = useState(false);
 
@@ -11,11 +20,21 @@ const PostCard = ({ post }) => {
     <div className="card mb-4">
       <div className="flex items-center justify-between mb-2">
         <span className="font-display text-lg font-semibold">{post?.title || 'Post Title'}</span>
-        <span className="text-xs bg-brand-surface border border-brand-border text-brand-primary px-3 py-1 rounded-full font-medium">
+        <span className="text-xs bg-brand-primary border border-brand-border text-brand-surfaceText px-3 py-1 rounded-full font-medium">
           {post?.feed || 'IdeaStream'}
         </span>
       </div>
-      <p className="text-brand-text text-sm leading-relaxed">{post?.content}</p>
+      <p className="text-brand-text text-sm leading-relaxed whitespace-pre-wrap">{post?.content}</p>
+      
+      {post?.imageUrl && (
+        <div className="mt-4">
+          <img 
+            src={getImageUrl(post.imageUrl)} 
+            alt="Post attachment" 
+            className="w-full max-h-[350px] object-cover rounded-xl border border-brand-border"
+          />
+        </div>
+      )}
       
       <div className="mt-4 flex items-center gap-4 text-sm text-brand-muted">
         <Link 
@@ -29,10 +48,10 @@ const PostCard = ({ post }) => {
         
         <button 
           onClick={() => setShowComments(!showComments)}
-          className="flex items-center gap-1 hover:text-brand-primary transition-colors cursor-pointer"
+          className="flex items-center gap-1 hover:text-brand-primary transition-colors cursor-pointer text-brand-text"
         >
           <img src={commentIcon} alt="Comments" className="w-4 h-4" />
-          <span>{post?.comments?.length ?? 0}</span>
+          <span className="font-medium">{post?.comments?.length ?? 0}</span>
         </button>
       </div>
 

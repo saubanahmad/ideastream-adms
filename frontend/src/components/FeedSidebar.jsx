@@ -24,13 +24,13 @@ import urbanCoreShortIcon from "../assets/icons/UC-short.svg";
 const ICONS = {
   'ideastream': ideaStreamShortIcon,
   'cultivate': cultivateShortIcon,
-  'digital-frontier': digitalFrontierShortIcon,
+  'digitalfrontier': digitalFrontierShortIcon,
   'fastlane': fastLaneShortIcon,
   'launchpad': launchPadShortIcon,
   'lifescience': lifeScienceShortIcon,
   'playlab': playLabShortIcon,
-  'tangible-tech': tangibleTechShortIcon,
-  'urban-core': urbanCoreShortIcon,
+  'tangibletech': tangibleTechShortIcon,
+  'urbancore': urbanCoreShortIcon,
 };
 
 const FeedSidebar = () => {
@@ -53,7 +53,7 @@ const FeedSidebar = () => {
             className={`sidebar-icon w-12 h-12 rounded-xl flex items-center justify-center
                         text-2xl transition-all duration-200 border border-transparent
                         ${isActive
-                          ? 'bg-brand-surface shadow-sm scale-110 border-brand-primary'
+                          ? 'bg-brand-surface shadow-sm scale-110 border-brand-surfaceText'
                           : 'bg-brand-surface/50 hover:bg-brand-surface hover:scale-110 hover:border-brand-border'
                         }
                         active:scale-95 cursor-pointer outline-none`}
