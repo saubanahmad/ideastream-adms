@@ -7,7 +7,7 @@ import api from '../api/axios';
 import editIcon from '../assets/icons/edit.svg';
 
 const Profile = () => {
-  const { user, login } = useAuth();
+  const { user, login, updateUser } = useAuth();
   
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
@@ -25,15 +25,20 @@ const Profile = () => {
 
     const fetchProfileData = async () => {
       try {
-        const [countsRes, postsRes] = await Promise.all([
+        const [countsRes, postsRes, meRes] = await Promise.all([
           api.get(`/users/${user.id}/social-counts`),
-          api.get(`/posts?authorId=${user.id}`)
+          api.get(`/posts?authorId=${user.id}`),
+          api.get('/auth/me')
         ]);
         
         setFollowersCount(countsRes.data.data.followers);
         setFollowingCount(countsRes.data.data.following);
         
         setPosts(postsRes.data.data);
+
+        if (meRes.data && meRes.data.user) {
+          updateUser(meRes.data.user);
+        }
       } catch (err) {
         console.error("Failed to load profile data", err);
       } finally {
@@ -42,7 +47,7 @@ const Profile = () => {
     };
 
     fetchProfileData();
-  }, [user]);
+  }, [user?.id]);
 
   const handleEditClick = () => {
     setEditForm({ fullName: user.fullName || '', username: user.username, bio: user.bio || '' });

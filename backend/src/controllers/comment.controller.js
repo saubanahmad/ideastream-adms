@@ -16,26 +16,28 @@ const addComment = async (req, res, next) => {
       return res.status(400).json({ status: "error", message: "Comment content is required" });
     }
 
-    const post = await Post.findById(id);
-    if (!post) {
-      return res.status(404).json({ status: "error", message: "Post not found" });
-    }
-
     const newComment = {
       authorId: userId,
       authorUsername: username,
       content: content.trim()
     };
 
-    post.comments.push(newComment);
-    await post.save();
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { $push: { comments: newComment } },
+      { new: true, runValidators: true }
+    );
 
-    const savedComment = post.comments[post.comments.length - 1];
+    if (!updatedPost) {
+      return res.status(404).json({ status: "error", message: "Post not found" });
+    }
+
+    const savedComment = updatedPost.comments[updatedPost.comments.length - 1];
 
     res.status(201).json({ 
       status: "success", 
       data: savedComment,
-      commentCount: post.comments.length
+      commentCount: updatedPost.comments.length
     });
   } catch (err) { 
     if (err.message.includes("MONGO_URI missing")) {

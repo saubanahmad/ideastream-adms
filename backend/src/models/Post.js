@@ -135,7 +135,12 @@ PostSchema.index({ feed: 1, createdAt: -1 }); // Latest feed per platform
 PostSchema.index({ feed: 1, score: -1 });      // Trending feed per platform
 PostSchema.index({ createdAt: -1 });           // Global latest feed
 PostSchema.index({ score: -1 });               // Global trending feed
-PostSchema.index({ title: "text", content: "text" }); // Full-text search
+PostSchema.index({ 
+  title: "text", 
+  content: "text",
+  authorUsername: "text",
+  feed: "text"
+}); // Full-text search
 
 const Post = mongoose.model("Post", PostSchema);
 
