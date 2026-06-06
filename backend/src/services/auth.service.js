@@ -26,6 +26,11 @@ const register = async ({ username, email, fullName, password }) => {
     where: {
       OR: [{ email }, { username }],
     },
+    select: {
+      id: true,
+      email: true,
+      username: true,
+    },
   });
 
   if (existingUser) {
