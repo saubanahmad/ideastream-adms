@@ -92,6 +92,11 @@ const getFollowers = async (userIdStr) => {
     const followerIds = result.records.map(record => parseInt(record.get('followerId'), 10));
     if (followerIds.length === 0) return [];
 
+    // TODO (ADMS Evaluation): 
+    // This query fetches all followers at once, which causes a huge IN (...) query 
+    // when a user has thousands of followers. For scalability:
+    // 1. Neo4j should return paginated IDs first (using SKIP and LIMIT).
+    // 2. PostgreSQL should hydrate only the current page of IDs.
     const users = await prisma.user.findMany({
       where: { id: { in: followerIds } },
       select: { id: true, username: true, email: true, fullName: true }
