@@ -7,6 +7,12 @@ const createPost = async (req, res, next) => {
   try {
     const { title, content, feed } = req.body;
     const { userId, username } = req.user; // From protect middleware
+    
+    let imageUrl = null;
+    if (req.file) {
+      // Create a relative path to the image
+      imageUrl = `/uploads/posts/${req.file.filename}`;
+    }
 
     if (!title || !content) {
       return res.status(400).json({ status: "error", message: "Title and content are required" });
@@ -18,6 +24,7 @@ const createPost = async (req, res, next) => {
       title,
       content,
       feed,
+      imageUrl,
     });
 
     res.status(201).json({ status: "success", data: post });

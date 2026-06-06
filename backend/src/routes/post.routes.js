@@ -5,8 +5,9 @@ const express = require("express");
 const router = express.Router();
 const postController = require("../controllers/post.controller");
 const { protect } = require("../middleware/auth.middleware");
+const upload = require("../middleware/upload.middleware");
 
-router.post("/", protect, postController.createPost);
+router.post("/", protect, upload.single('image'), postController.createPost);
 router.get("/", postController.getPosts);
 router.get("/:id", postController.getPost);
 router.put("/:id", protect, postController.updatePost);

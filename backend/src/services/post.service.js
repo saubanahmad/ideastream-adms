@@ -3,6 +3,8 @@
  * Uses MongoDB Post model.
  */
 const Post = require('../models/Post');
+const fs = require('fs');
+const path = require('path');
 
 const checkMongoConfig = () => {
   if (!process.env.MONGO_URI) {
@@ -10,7 +12,7 @@ const checkMongoConfig = () => {
   }
 };
 
-const createPost = async ({ authorId, authorUsername, title, content, feed }) => {
+const createPost = async ({ authorId, authorUsername, title, content, feed, imageUrl }) => {
   checkMongoConfig();
   const post = new Post({
     authorId,
@@ -18,6 +20,7 @@ const createPost = async ({ authorId, authorUsername, title, content, feed }) =>
     title,
     content,
     feed,
+    imageUrl,
   });
   await post.save();
   return post;
@@ -79,6 +82,18 @@ const deletePost = async (postId, userId) => {
   }
 
   await Post.deleteOne({ _id: postId });
+
+  // If the post has an image, delete the physical file
+  if (post.imageUrl) {
+    try {
+      const filePath = path.join(__dirname, '../../', post.imageUrl);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    } catch (err) {
+      console.error("Failed to delete post image file:", err);
+    }
+  }
   return true;
 };
 
