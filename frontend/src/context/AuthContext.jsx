@@ -69,6 +69,14 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
   };
 
+  /**
+   * updateUser — Updates user data without requiring a new token
+   */
+  const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
   const value = {
     user,
     token,
@@ -76,6 +84,7 @@ export const AuthProvider = ({ children }) => {
     isLoggedIn: !!user, // True if user is not null
     login,
     logout,
+    updateUser,
   };
 
   return (

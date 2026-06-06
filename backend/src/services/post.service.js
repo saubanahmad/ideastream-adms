@@ -54,19 +54,25 @@ const getPostById = async (postId) => {
 
 const updatePost = async (postId, userId, { title, content }) => {
   checkMongoConfig();
-  const post = await Post.findById(postId);
-  if (!post) {
-    throw new Error("Post not found");
-  }
   
-  if (post.authorId !== userId) {
+  const updateFields = {};
+  if (title) updateFields.title = title;
+  if (content) updateFields.content = content;
+
+  const post = await Post.findOneAndUpdate(
+    { _id: postId, authorId: String(userId) },
+    { $set: updateFields },
+    { new: true, runValidators: true }
+  );
+
+  if (!post) {
+    const existingPost = await Post.findById(postId);
+    if (!existingPost) {
+      throw new Error("Post not found");
+    }
     throw new Error("Unauthorized: You can only edit your own posts");
   }
-
-  if (title) post.title = title;
-  if (content) post.content = content;
-
-  await post.save();
+  
   return post;
 };
 
@@ -100,18 +106,13 @@ const deletePost = async (postId, userId) => {
 const searchPosts = async (keyword) => {
   checkMongoConfig();
   if (!keyword || !keyword.trim()) return [];
-  
-  const regex = new RegExp(keyword, 'i');
-  const filter = {
-    $or: [
-      { title: regex },
-      { content: regex },
-      { authorUsername: regex },
-      { feed: regex }
-    ]
-  };
 
-  return await Post.find(filter).sort({ createdAt: -1 }).limit(10);
+  return await Post.find(
+    { $text: { $search: keyword } },
+    { textScore: { $meta: "textScore" } }
+  )
+    .sort({ textScore: { $meta: "textScore" }, createdAt: -1 })
+    .limit(10);
 };
 
 const updateAuthorUsername = async (authorId, newUsername) => {
